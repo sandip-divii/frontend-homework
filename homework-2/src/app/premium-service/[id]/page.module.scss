@@ -1,0 +1,24 @@
+@use "../../../styles/mixins" as *;
+
+.section {
+  padding: var(--space-15) 0;
+}
+
+.inner {
+  @include container;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-6);
+}
+
+.meta {
+  font-size: var(--text-lg);
+  color: var(--color-txt-2);
+}
+
+.note {
+  font-size: var(--text-md);
+  color: var(--color-txt-3);
+}

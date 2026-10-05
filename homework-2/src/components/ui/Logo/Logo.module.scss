@@ -1,0 +1,39 @@
+@use "../../../styles/mixins" as *;
+
+.logo {
+  position: relative;
+  display: block;
+  width: 180px;
+  height: 60px;
+  color: var(--color-txt-1);
+
+  @include down($bp-tab) {
+    width: 132px;
+    height: 44px;
+  }
+}
+
+.word {
+  position: absolute;
+  top: 0;
+  left: 26px;
+  z-index: 1;
+  font-family: var(--font-serif);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-regular);
+  letter-spacing: 0.18em;
+  line-height: 1.2;
+  white-space: nowrap;
+
+  @include down($bp-tab) {
+    left: 18px;
+    font-size: var(--text-md);
+  }
+}
+
+.swoosh {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}

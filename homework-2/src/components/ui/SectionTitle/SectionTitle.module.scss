@@ -1,0 +1,45 @@
+@use "../../../styles/mixins" as *;
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+
+  @include down($bp-sm) {
+    gap: var(--space-6);
+  }
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-none);
+  color: var(--color-txt-1);
+
+  @include down($bp-sm) {
+    font-size: var(--text-2xl);
+  }
+
+  @include down($bp-xxs) {
+    font-size: var(--text-xl);
+  }
+}
+
+.rule {
+  position: relative;
+  height: 1px;
+  background: var(--color-line-2);
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 148px;
+    background: var(--color-line-1);
+
+    @include down($bp-xxs) {
+      width: 96px;
+    }
+  }
+}

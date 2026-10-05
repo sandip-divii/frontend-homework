@@ -4,8 +4,24 @@
     {
       "name": "homework-1-dev",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["--prefix", "homework-1", "run", "dev"],
+      "runtimeArgs": [
+        "--prefix",
+        "homework-1",
+        "run",
+        "dev"
+      ],
       "port": 3000
+    },
+    {
+      "name": "homework-2-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "homework-2",
+        "run",
+        "dev"
+      ],
+      "port": 3001
     }
   ]
 }

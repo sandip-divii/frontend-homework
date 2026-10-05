@@ -1,0 +1,155 @@
+@use "../../../styles/mixins" as *;
+
+// Full text nav needs ~1270px (logo + 5 links + icons); collapse to a menu button below 1366.
+$bp-nav: 1365px;
+
+.header {
+  position: relative;
+  z-index: var(--z-header);
+  background: var(--color-bg);
+}
+
+.inner {
+  @include container;
+
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  height: var(--header-h);
+
+  @include down($bp-tab) {
+    height: var(--header-h-mobile);
+  }
+}
+
+.nav {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin-left: clamp(24px, 3vw, 60px);
+
+  @include down($bp-nav) {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: var(--space-2) var(--gutter) var(--space-4);
+    background: var(--color-bg);
+    border-top: 1px solid var(--color-line-2);
+    border-bottom: 1px solid var(--color-line-2);
+    box-shadow: 0 12px 24px var(--color-overlay);
+  }
+}
+
+.navOpen {
+  @include down($bp-nav) {
+    display: block;
+  }
+}
+
+.navList {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 1.6vw, 32px);
+
+  @include down($bp-nav) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+}
+
+.navLink {
+  position: relative;
+  display: inline-flex;
+  padding: var(--space-2) 0;
+  // Figma: 18px. At 18px the five links overflow the 1280 container even in the frame, so 16px.
+  font-size: var(--text-base);
+  font-weight: var(--weight-light);
+  line-height: var(--leading-none);
+  color: var(--color-txt-2);
+  white-space: nowrap;
+  transition: color var(--dur-fast) var(--ease);
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+    height: 1px;
+    background: transparent;
+    transition: background-color var(--dur-fast) var(--ease);
+  }
+
+  &:hover {
+    color: var(--color-txt-1);
+  }
+
+  @include down($bp-nav) {
+    display: flex;
+    min-height: var(--tap-min);
+    align-items: center;
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--color-line-2);
+    font-size: var(--text-base);
+
+    &::after {
+      display: none;
+    }
+  }
+}
+
+.navCurrent {
+  font-weight: var(--weight-semibold);
+  color: var(--color-txt-1);
+
+  &::after {
+    background: var(--color-txt-1);
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-left: auto;
+}
+
+.iconBtn {
+  @include reset-button;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--color-txt-1);
+  transition: color var(--dur-fast) var(--ease);
+
+  &:hover {
+    color: var(--color-txt-3);
+  }
+}
+
+.logoutItem {
+  @include down($bp-xxs) {
+    display: none;
+  }
+}
+
+.menuBtn {
+  @include reset-button;
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  color: var(--color-txt-1);
+
+  @include down($bp-nav) {
+    display: inline-flex;
+  }
+}

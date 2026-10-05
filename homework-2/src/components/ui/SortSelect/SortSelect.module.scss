@@ -1,0 +1,73 @@
+@use "../../../styles/mixins" as *;
+
+.select {
+  position: relative;
+  display: inline-block;
+}
+
+.trigger {
+  @include reset-button;
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 100px;
+  height: 40px;
+  padding: 0 var(--space-4) 0 var(--space-5);
+  border: 1px solid var(--color-line-1);
+  background: var(--color-bg);
+  font-size: var(--text-md);
+  color: var(--color-txt-2);
+  white-space: nowrap;
+  transition: border-color var(--dur-fast) var(--ease);
+
+  &:hover,
+  &[aria-expanded="true"] {
+    border-color: var(--color-txt-1);
+  }
+}
+
+.value {
+  line-height: var(--leading-none);
+}
+
+.chevron {
+  flex: 0 0 auto;
+  transition: transform var(--dur-fast) var(--ease);
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% - 1px);
+  right: 0;
+  z-index: var(--z-menu);
+  min-width: 100%;
+  padding: var(--space-1) 0;
+  border: 1px solid var(--color-line-1);
+  background: var(--color-bg);
+  box-shadow: 0 8px 24px var(--color-overlay);
+}
+
+.option {
+  padding: var(--space-3) var(--space-5);
+  font-size: var(--text-md);
+  color: var(--color-txt-2);
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--color-bg-soft);
+    color: var(--color-txt-1);
+    outline: none;
+  }
+}
+
+.optionActive {
+  color: var(--color-txt-1);
+  font-weight: var(--weight-semibold);
+}
