@@ -22,7 +22,8 @@ export type IconName =
   | "alert"
   | "eye"
   | "eyeOff"
-  | "check";
+  | "check"
+  | "login";
 
 const PATHS: Record<IconName, ReactNode> = {
   bell: (
@@ -131,6 +132,13 @@ const PATHS: Record<IconName, ReactNode> = {
     </>
   ),
   check: <polyline points="20 6 9 17 4 12" />,
+  login: (
+    <>
+      <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+      <polyline points="10 17 15 12 10 7" />
+      <line x1="15" y1="12" x2="3" y2="12" />
+    </>
+  ),
 };
 
 interface IconProps extends Omit<SVGProps<SVGSVGElement>, "name"> {

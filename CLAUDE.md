@@ -46,7 +46,7 @@ One component per folder: `Name.tsx` + `Name.module.scss`. Named exports, functi
 
 - Reuse before creating: check `src/components/ui` first. Extend a primitive with a prop/variant rather than forking it.
 - Every list/data component has **loading, empty, error and filled** states. The list exposes `data-list-status` for QA and `?state=loading|empty|error` pins a state.
-- Server Components by default; add `"use client"` only where state/effects/events are required (currently Header, PremiumServiceList, SearchField, SortSelect, CategoryTabs, hook).
+- Server Components by default; add `"use client"` only where state/effects/events are required (currently HeaderView, PremiumServiceList, SearchField, SortSelect, CategoryTabs, LoginForm, hook). `Header` is a thin async Server Component that reads the session and renders `HeaderView`..
 - Accessibility is non-negotiable: semantic elements, labels on icon buttons, `aria-current`, keyboard support for custom widgets, visible focus, ≥24px targets (asserted by the Playwright suite).
 - Data: `src/lib/api/services.ts` is a mock with a 700 ms delay. Keep the signature when wiring a real API.
 - Auth is a mock: demo accounts in `src/data/users.mock.ts`, cookie helpers in `src/lib/auth/session.ts`, server actions in `src/features/auth/actions.ts` (a `"use server"` file may export only async functions — constants live in `loginState.ts`). Never put real credentials in the repo.

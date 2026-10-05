@@ -58,5 +58,5 @@ Read through Figma Dev Mode in Chrome (the MCP quota was exhausted). Specs captu
 | 3 | States | ⚠️ | Figma shows both field errors at once (a state sheet). Live form shows one error at a time, plus "required" messages Figma does not have. No focus / disabled / loading states drawn — added (border darkens on focus, button disabled while submitting). |
 | 4 | Placeholder colour | ⚠️ | `line1 #CCC` here vs `#B5B5B5` on the list search box — two placeholder greys in one system. |
 | 5 | Checkbox row | ❓ | Auto-layout is `space-between` but has one child. Is a "Find ID / password" link intended on the right? |
-| 6 | Header | ❓ | Login page uses the logged-in header (`gnb_로그인후`). Is there a logged-out header variant? |
+| 6 | Header | ❓ | Only the logged-in header (`gnb_로그인후`: bell · my · cart · log out) exists in the frames we could read. Logged-out state built as my-page icon + log-in icon, both linking to `/login`, with bell and cart hidden. Please point us to `gnb_로그인전` if it exists. |
 | 7 | Assets | ⚠️ | `eye_2` (31×25) and `check_box` (30×30) icons could not be exported; drawn as inline SVG. |

@@ -43,6 +43,7 @@ No `.env.local` is needed for the mock data. If one is introduced later, it stay
 - Unknown ID → "This ID does not exist."; wrong password → "The ID and password do not match." (the two error states drawn in Figma).
 - **Save ID** remembers the ID in a cookie and pre-fills it next time; the eye button toggles password visibility.
 - Success sets an `httpOnly` session cookie and redirects to the list; the header's logout icon clears it and returns to `/login`. The list itself is not gated so the demo stays open.
+- The header's account icons follow the session: signed in shows bell · my page · cart · log out (Figma `gnb_로그인후`); signed out shows my page · log in, both linking to `/login` (no Figma frame for this state, see `docs/DESIGN-CHECK.md`).
 - `npm run qa:login` runs the Playwright checks (errors, sign-in, remember-ID, logout, password toggle) and writes `screenshots/login/{1920,1366,768,375}[-error].png`.
 
 ## Responsive QA (Step 5)

@@ -35,8 +35,11 @@ test.describe("login", () => {
     await page.goto("/login");
     await page.getByText("Save ID").click();
     await expect(page.getByLabel("Save ID")).toBeChecked();
+    await expect(page.getByRole("link", { name: "Log in", exact: true })).toBeVisible(); // logged-out header
     await submit(page, USER.id, USER.password);
     await expect(page).toHaveURL(/\/$/);
+    await expect(page.getByRole("button", { name: "Log out" })).toBeVisible(); // logged-in header
+    await expect(page.getByRole("button", { name: "Notifications" })).toBeVisible();
 
     const names = (await context.cookies()).map((c) => c.name);
     expect(names).toContain("bp_session");
@@ -49,6 +52,7 @@ test.describe("login", () => {
     await page.getByRole("button", { name: "Log out" }).click();
     await expect(page).toHaveURL(/\/login$/);
     expect((await context.cookies()).map((c) => c.name)).not.toContain("bp_session");
+    await expect(page.getByRole("link", { name: "Log in", exact: true })).toBeVisible();
   });
 
   test("show/hide password toggles the input type", async ({ page }) => {
