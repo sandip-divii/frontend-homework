@@ -1,0 +1,121 @@
+@use "../../../styles/mixins" as *;
+
+.banner {
+  position: relative;
+  overflow: hidden;
+  padding: 120px 0;
+  background: linear-gradient(90deg, var(--color-bg-soft) 0%, var(--color-bg-soft) 55%, var(--color-bg-photo) 100%);
+
+  // Soft highlight standing in for the photo on the right of the Figma frame.
+  &::after {
+    content: "";
+    position: absolute;
+    top: -30%;
+    right: -12%;
+    width: 60%;
+    height: 160%;
+    background: radial-gradient(ellipse at center, color-mix(in srgb, var(--color-white) 60%, transparent), transparent 68%);
+    pointer-events: none;
+  }
+
+  @include down($bp-sm) {
+    padding: var(--space-12) 0;
+  }
+
+  @include down($bp-xxs) {
+    padding: var(--space-10) 0;
+  }
+}
+
+.inner {
+  @include container;
+
+  position: relative;
+  z-index: 1;
+}
+
+.content {
+  max-width: 1100px;
+}
+
+.eyebrow {
+  font-family: var(--font-serif);
+  font-size: var(--text-2xl);
+  line-height: var(--leading-snug);
+  color: var(--color-txt-2);
+
+  @include down($bp-sm) {
+    font-size: var(--text-lg);
+  }
+}
+
+.title {
+  margin-top: var(--space-4);
+  font-family: var(--font-serif);
+  font-size: var(--text-4xl);
+  font-weight: var(--weight-bold);
+  line-height: 1.2;
+  color: var(--color-primary-3);
+  overflow-wrap: anywhere;
+
+  @include down($bp-sm) {
+    font-size: var(--text-2xl);
+  }
+
+  @include down($bp-xxs) {
+    font-size: var(--text-xl);
+  }
+}
+
+.rule {
+  height: 1px;
+  margin: var(--space-7) 0 var(--space-10);
+  border: 0;
+  background: var(--color-primary-3);
+  opacity: 0.4;
+
+  @include down($bp-sm) {
+    margin: var(--space-5) 0 var(--space-7);
+  }
+}
+
+.body {
+  font-size: var(--text-lg);
+  line-height: var(--leading-body);
+  color: var(--color-txt-2);
+
+  @include down($bp-sm) {
+    font-size: var(--text-base);
+  }
+}
+
+.br {
+  @include down($bp-md) {
+    display: none;
+  }
+}
+
+.callout {
+  margin-top: var(--space-6);
+  font-family: var(--font-serif);
+  font-size: var(--text-xl);
+  line-height: var(--leading-body);
+  color: var(--color-txt-1);
+
+  @include down($bp-sm) {
+    font-size: var(--text-base);
+  }
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+  margin-top: var(--space-10);
+
+  @include down($bp-sm) {
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-top: var(--space-8);
+  }
+}

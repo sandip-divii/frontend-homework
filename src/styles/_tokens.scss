@@ -1,0 +1,85 @@
+// Design tokens — single source of truth for colours, type, spacing.
+// Figma: XP | Bookplate design → pc_1920_Expert Services (See More) (node 1600-38779)
+// Components never use raw hex / px values for colour; always `var(--…)`.
+:root {
+  // ── Colours published as Figma variables ────────────────────────────────
+  --color-txt-1: #222222; // txt1
+  --color-txt-2: #555555; // txt2
+  --color-txt-3: #777777; // txt3
+  --color-line-1: #cccccc; // line1
+  --color-primary-3: #856654; // p3 (badge, banner headline)
+  --color-point-1: #ffae49; // point/01 (star)
+  --color-point-2: #f53e3e; // point/02 (like)
+
+  // ── Colours read from the frame but NOT published as variables ──────────
+  // (flagged for the designer in docs/DESIGN-CHECK.md)
+  --color-bg: #ffffff;
+  --color-bg-soft: #f2efea; // tit_big + con3 background
+  --color-bg-photo: #e6d9d1; // right edge of the con3 photo
+  --color-line-2: #eeeeee; // card border, long section rule
+  --color-placeholder: #b5b5b5; // search placeholder
+  --color-thumb: #f5f5f5; // thumbnail backdrop
+  --color-skeleton: #f2f2f2;
+  --color-skeleton-shine: #fafafa;
+  --color-white: #ffffff;
+  --color-overlay: rgb(34 34 34 / 40%);
+
+  // ── Typography ───────────────────────────────────────────────────────────
+  --font-sans: "Pretendard Variable", pretendard, -apple-system, blinkmacsystemfont, "Segoe UI", roboto,
+    "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-serif: var(--font-nanum-myeongjo), "Nanum Myeongjo", "Apple Myungjo", batang, serif;
+
+  --text-xs: 12px;
+  --text-sm: 13px;
+  --text-md: 14px;
+  --text-base: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 26px;
+  --text-3xl: 32px; // pc/1depth_tit
+  --text-4xl: 40px;
+  --text-5xl: 48px; // pc/bigtitle_1
+
+  --tracking-tight: -0.03em; // Figma letterSpacing -3 (%)
+  --leading-none: 1;
+  --leading-snug: 1.4;
+  --leading-body: 1.8; // pc/2depth_sub
+
+  --weight-light: 300;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  // ── Spacing (4px base) ───────────────────────────────────────────────────
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 10px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 30px;
+  --space-8: 40px;
+  --space-9: 50px;
+  --space-10: 60px;
+  --space-12: 80px;
+  --space-15: 100px;
+
+  // ── Layout ───────────────────────────────────────────────────────────────
+  --container-max: 1280px;
+  --gutter: 20px;
+  --header-h: 120px;
+  --header-h-mobile: 72px;
+  --control-h: 60px;
+  --control-h-sm: 48px;
+  --card-thumb-ratio: 413 / 240;
+  --tap-min: 44px;
+
+  // ── Motion ───────────────────────────────────────────────────────────────
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+
+  --z-header: 50;
+  --z-menu: 60;
+}

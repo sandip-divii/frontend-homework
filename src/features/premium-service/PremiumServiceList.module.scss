@@ -1,0 +1,71 @@
+@use "../../styles/mixins" as *;
+
+.section {
+  padding: var(--space-15) 0;
+
+  @include down($bp-sm) {
+    padding: var(--space-10) 0;
+  }
+
+  @include down($bp-xxs) {
+    padding: var(--space-8) 0;
+  }
+}
+
+.inner {
+  @include container;
+
+  scroll-margin-top: var(--space-5);
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+
+  @include down($bp-md) {
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+}
+
+.search {
+  flex: 0 1 480px;
+  min-width: 320px;
+
+  @include down($bp-md) {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+}
+
+.title {
+  margin-top: var(--space-8);
+
+  @include down($bp-sm) {
+    margin-top: var(--space-6);
+  }
+}
+
+.controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--space-8);
+
+  @include down($bp-sm) {
+    margin-top: var(--space-6);
+  }
+}
+
+.list {
+  margin-top: var(--space-8);
+
+  @include down($bp-sm) {
+    margin-top: var(--space-5);
+  }
+}
+
+.pagination {
+  margin-top: var(--space-8);
+}

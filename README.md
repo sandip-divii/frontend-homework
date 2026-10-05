@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Homework 1 — Premium Paid Services list (Bookplate)
 
-## Getting Started
+A list screen built from the Figma frame **pc_1920_Expert Services (See More)** of _XP | Bookplate design_, with fake data, reusable components, token-only styling, loading / empty / filled states and a responsive QA pass at ten widths.
 
-First, run the development server:
+| | |
+| --- | --- |
+| **Demo** | _pending deploy_ — run locally with `npm run dev` (see below) or deploy with `npx vercel` |
+| **Repo** | _pending push_ — local git repository in this folder |
+| **Figma** | https://www.figma.com/design/7yxIdnZegxBVEiqyV3oQmA/XP-%7C-Bookplate-design?node-id=1600-38779 |
+| **Reference render** | [`docs/figma-reference-1920.png`](docs/figma-reference-1920.png) |
+
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev          # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+No `.env.local` is needed for the mock data. If one is introduced later, it stays untracked (`.env*` is git-ignored).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Script | Purpose |
+| --- | --- |
+| `npm run typecheck` | `tsc --noEmit` |
+| `npm run lint` | ESLint (eslint-config-next, core-web-vitals + TypeScript) |
+| `npm run check` | both of the above |
+| `npm run qa:responsive` | Playwright: screenshots at 10 widths × 3 states, sideways-scroll and tap-target assertions (run `npx playwright install chromium` once) |
+| `npm run build` | production build |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## States
 
-## Learn More
+| State | How to see it |
+| --- | --- |
+| Loading | first 700 ms of any query, or pin it with [`/?state=loading`](http://localhost:3000/?state=loading) |
+| Empty | click the **Typo inspection** tab (no mock items), search for gibberish, or [`/?state=empty`](http://localhost:3000/?state=empty) |
+| Error | [`/?state=error`](http://localhost:3000/?state=error) — "Try again" re-runs the query |
+| Filled | default: 12 cards per page, 50 mock services across 3 categories, sort + pagination |
 
-To learn more about Next.js, take a look at the following resources:
+## Responsive QA (Step 5)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Screenshots live in [`screenshots/`](screenshots/) — `filled/`, `loading/`, `empty/`, one PNG per width.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Width | 1920 | 1600 | 1366 | 1280 | 1024 | 991 | 768 | 640 | 480 | 375 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Columns | 3 | 3 | 3 | 3 | 3 | 2 | 2 | 1 | 1 | 1 |
+| Header | full nav | full nav | full nav | menu button | menu | menu | menu | menu | menu | menu |
+| Search box | beside tabs | beside | beside | beside | own row | own row | own row | own row | own row | own row |
 
-## Deploy on Vercel
+The Playwright suite asserts, at every width and state, that the document does not scroll sideways, no visible button/input is smaller than 24 × 24 px, and the filled state renders 12 cards. See the test output section at the bottom for the last run.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## What was built
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/app/                      routes (Server Components) + fonts
+src/components/ui/            Icon · Logo · Button · Badge · Skeleton · EmptyState · Pagination
+                              SearchField · SortSelect · CategoryTabs · SectionTitle
+src/components/layout/        Header · PageHero · Footer
+src/components/service/       ServiceCard (+ skeleton) · ServiceGrid (4 states) · ExpertBanner
+src/features/premium-service/ PremiumServiceList — composes the above, owns filter/sort/page state
+src/hooks/useExpertServices   derived loading/success/empty/error, abortable
+src/lib/api/services.ts       mock API (700 ms delay) with filter / sort / paginate
+src/data/                     categories, sort options, 50 fake services
+src/styles/_tokens.scss       every colour / size / space as a CSS variable (Figma variables + derived)
+tests/responsive.spec.ts      Step-5 QA
+```
+
+Design rules followed: SCSS modules only, **no hardcoded colours** (every value is a token in `_tokens.scss`, with its Figma variable name in a comment), role-based camelCase class names, one component per folder, Server Components by default.
+
+## Design check & assumptions
+
+The Figma frame was checked before building; results and the ten questions for the designer are in [`docs/DESIGN-CHECK.md`](docs/DESIGN-CHECK.md). The plan written before coding is in [`docs/PLAN.md`](docs/PLAN.md). Headline items:
+
+- Only a 1920 frame exists; the responsive behaviour is our interpretation (documented).
+- Several Figma strings are machine-translation artifacts ("whole; total; entire", "One … Ten"); tab labels and page numbers were normalised, header/footer copy kept verbatim.
+- The logo and the banner photo could not be exported (Figma MCP quota); they are approximated in code and flagged for the designer.
+- Card meta text is 12px instead of Figma's 11px for legibility.
+
+## Project setup for Claude
+
+- [`CLAUDE.md`](CLAUDE.md) — conventions, commands, do/don't.
+- [`.claude/skills/fe-responsive-qa/SKILL.md`](.claude/skills/fe-responsive-qa/SKILL.md) — runs and reviews the responsive QA.
+- [`.claude/wm/`](.claude/wm/README.md) — drop `wm-contract.md` here (not available on this machine at setup time).

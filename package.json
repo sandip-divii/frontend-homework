@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm run lint",
+    "qa:responsive": "playwright test tests/responsive.spec.ts"
   },
   "dependencies": {
     "next": "16.3.8",
@@ -22,5 +25,8 @@
     "eslint-config-next": "16.3.8",
     "sass": "^1.105.1",
     "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }
