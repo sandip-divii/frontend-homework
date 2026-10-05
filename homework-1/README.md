@@ -5,7 +5,7 @@ A list screen built from the Figma frame **pc_1920_Expert Services (See More)** 
 | | |
 | --- | --- |
 | **Demo** | _pending deploy_ — run locally with `npm run dev` (see below) or deploy with `npx vercel` |
-| **Repo** | _pending push_ — local git repository in this folder |
+| **Repo** | https://github.com/sandip-divii/frontend-homework (private) — this homework lives in [`homework-1/`](https://github.com/sandip-divii/frontend-homework/tree/main/homework-1) |
 | **Figma** | https://www.figma.com/design/7yxIdnZegxBVEiqyV3oQmA/XP-%7C-Bookplate-design?node-id=1600-38779 |
 | **Reference render** | [`docs/figma-reference-1920.png`](docs/figma-reference-1920.png) |
 
