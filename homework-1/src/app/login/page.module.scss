@@ -1,0 +1,40 @@
+@use "../../styles/mixins" as *;
+
+.section {
+  padding: var(--space-15) 0;
+  background: var(--color-bg-soft);
+
+  @include down($bp-sm) {
+    padding: var(--space-10) 0;
+  }
+
+  @include down($bp-xxs) {
+    padding: var(--space-8) 0;
+  }
+}
+
+.inner {
+  @include container;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  max-width: calc(600px + var(--gutter) * 2);
+
+  @include down($bp-sm) {
+    gap: var(--space-6);
+  }
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-none);
+  text-align: center;
+  color: var(--color-txt-1);
+
+  @include down($bp-sm) {
+    font-size: var(--text-2xl);
+  }
+}

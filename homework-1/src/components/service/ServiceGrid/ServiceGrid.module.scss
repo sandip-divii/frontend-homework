@@ -1,0 +1,21 @@
+@use "../../../styles/mixins" as *;
+
+.region {
+  min-width: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-8) var(--space-5);
+
+  @include down($bp-md) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-7) var(--space-4);
+  }
+
+  @include down($bp-xs) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-5);
+  }
+}

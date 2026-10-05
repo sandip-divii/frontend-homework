@@ -1,0 +1,54 @@
+@use "../../../styles/mixins" as *;
+
+.tabs {
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.list {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--control-h-sm);
+  white-space: nowrap;
+}
+
+.divider {
+  color: var(--color-line-1);
+  font-size: var(--text-base);
+  line-height: var(--leading-none);
+  user-select: none;
+}
+
+.tab {
+  @include reset-button;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px; // keeps short labels ("All") a valid tap target
+  min-height: var(--control-h-sm);
+  font-size: var(--text-base);
+  line-height: var(--leading-none);
+  color: var(--color-txt-3);
+  transition: color var(--dur-fast) var(--ease);
+
+  &:hover {
+    color: var(--color-txt-1);
+  }
+
+  @include down($bp-sm) {
+    font-size: var(--text-md);
+  }
+}
+
+.active {
+  color: var(--color-txt-1);
+  font-weight: var(--weight-semibold);
+}

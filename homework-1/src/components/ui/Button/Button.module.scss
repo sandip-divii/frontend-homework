@@ -1,0 +1,103 @@
+@use "../../../styles/mixins" as *;
+
+.button {
+  @include reset-button;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-5);
+  border: 1px solid transparent;
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-none);
+  text-align: center;
+  transition:
+    background-color var(--dur-base) var(--ease),
+    color var(--dur-base) var(--ease),
+    border-color var(--dur-base) var(--ease);
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.label {
+  @include truncate;
+}
+
+.icon {
+  flex: 0 0 auto;
+}
+
+// Sizes
+.lg {
+  min-height: 70px;
+  min-width: 380px;
+  padding: 0 var(--space-8);
+  font-size: var(--text-lg);
+
+  @include down($bp-sm) {
+    min-height: var(--control-h);
+    min-width: 0;
+    width: 100%;
+    padding: 0 var(--space-6);
+    font-size: var(--text-base);
+  }
+}
+
+.md {
+  min-height: var(--control-h-sm);
+  padding: 0 var(--space-6);
+  font-size: var(--text-base);
+}
+
+// Login submit: 80px tall, 22px label (Figma "btn")
+.xl {
+  min-height: 80px;
+  padding: 0 var(--space-9);
+  font-size: var(--text-2xl-sm);
+
+  @include down($bp-sm) {
+    min-height: var(--control-h);
+    padding: 0 var(--space-6);
+    font-size: var(--text-lg);
+  }
+}
+
+// Variants
+.primary {
+  background: var(--color-txt-1);
+  border-color: var(--color-txt-1);
+  color: var(--color-white);
+
+  &:hover:not(:disabled) {
+    background: var(--color-txt-2);
+    border-color: var(--color-txt-2);
+  }
+}
+
+.outline {
+  background: transparent;
+  border-color: var(--color-txt-1);
+  color: var(--color-txt-1);
+
+  &:hover:not(:disabled) {
+    background: var(--color-txt-1);
+    color: var(--color-white);
+  }
+}
+
+.ghost {
+  background: transparent;
+  color: var(--color-txt-1);
+  min-width: 0;
+
+  &:hover:not(:disabled) {
+    color: var(--color-txt-2);
+  }
+}
+
+.fullWidth {
+  width: 100%;
+}

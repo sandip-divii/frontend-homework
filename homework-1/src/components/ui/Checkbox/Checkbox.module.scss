@@ -1,0 +1,52 @@
+@use "../../../styles/mixins" as *;
+
+.checkbox {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 30px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.input {
+  @include visually-hidden;
+}
+
+.box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--color-line-1);
+  background: var(--color-bg);
+  color: var(--color-txt-1);
+  transition: border-color var(--dur-fast) var(--ease);
+}
+
+.mark {
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease);
+}
+
+.input:checked + .box .mark {
+  opacity: 1;
+}
+
+.input:focus-visible + .box {
+  outline: 2px solid var(--color-txt-1);
+  outline-offset: 2px;
+}
+
+.checkbox:hover .box {
+  border-color: var(--color-txt-1);
+}
+
+.label {
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-none);
+  color: var(--color-txt-3);
+}
