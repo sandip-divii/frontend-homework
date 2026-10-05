@@ -20,11 +20,13 @@ export function Logo({ href = "/", className }: LogoProps) {
         북플레이트
       </span>
       <svg className={styles.swoosh} viewBox="0 0 180 60" aria-hidden="true" focusable="false">
+        {/* Lower stroke: one deep sweep from the left point up to the top-right tail.
+            Upper stroke: nearly straight, crosses the tail near x≈145 and overshoots a little. */}
         <path
-          d="M8 27 C 30 62, 110 66, 150 31 C 158 24, 168 15, 178 8 M8 27 C 40 50, 110 52, 150 31"
+          d="M4 22 C 20 70, 110 72, 178 6 M4 22 C 50 38, 110 40, 164 31"
           fill="none"
           stroke="currentColor"
-          strokeWidth="1.3"
+          strokeWidth="1.2"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
