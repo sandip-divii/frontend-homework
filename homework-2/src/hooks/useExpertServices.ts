@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fetchExpertServices } from "@/lib/api/services";
+import { listServices } from "@/services/expertServices";
 import type { ExpertService, PagedResult, ServiceQuery } from "@/types/service";
 import type { ForcedState } from "@/features/premium-service/forcedState";
 
@@ -29,8 +29,8 @@ interface Resolved {
 const EMPTY: PagedResult<ExpertService> = { items: [], total: 0, page: 1, pageSize: 0, totalPages: 1 };
 
 /**
- * Loads one page of services. Status is derived, never stored, so a query change
- * flips back to "loading" synchronously without a setState-in-effect.
+ * Loads one page of services from /api/services through the expertServices service.
+ * Status is derived, never stored, so a query change flips back to "loading" synchronously.
  */
 export function useExpertServices(query: ServiceQuery, options: UseExpertServicesOptions = {}): ExpertServicesState {
   const { forced, reloadToken = 0 } = options;
@@ -41,7 +41,7 @@ export function useExpertServices(query: ServiceQuery, options: UseExpertService
   useEffect(() => {
     if (forced) return;
     const controller = new AbortController();
-    fetchExpertServices({ category, keyword, sort, page, pageSize }, { signal: controller.signal })
+    listServices({ category, keyword, sort, page, pageSize }, controller.signal)
       .then((data) => setResolved({ key, data, error: null }))
       .catch((err: unknown) => {
         if (controller.signal.aborted) return;

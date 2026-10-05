@@ -10,12 +10,17 @@
     "typecheck": "tsc --noEmit",
     "check": "npm run typecheck && npm run lint",
     "qa:responsive": "playwright test tests/responsive.spec.ts",
-    "qa:login": "playwright test tests/login.spec.ts"
+    "qa:login": "playwright test tests/login.spec.ts",
+    "db:migrate": "node db/migrate.mjs",
+    "db:seed": "node db/seed.mjs",
+    "db:reset": "node db/seed.mjs --reset"
   },
   "dependencies": {
+    "mysql2": "^3.24.5",
     "next": "16.3.8",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",

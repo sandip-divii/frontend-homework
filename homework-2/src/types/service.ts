@@ -3,19 +3,22 @@ export type CategoryFilter = ServiceCategory | "all";
 
 export type SortOption = "recommended" | "newest" | "priceAsc" | "priceDesc" | "rating";
 
+/** Row of `expert_services` as returned by the API. */
 export interface ExpertService {
-  id: string;
+  id: number;
   category: ServiceCategory;
   author: string;
   title: string;
+  description: string | null;
   /** Price in KRW (the design shows "15,000" without a currency symbol). */
   price: number;
   likes: number;
   rating: number;
   reviewCount: number;
   thumbnail: string;
-  /** Monotonic index used for the "newest" sort in mock data. */
-  createdAt: number;
+  createdBy: number | null;
+  createdAt: string; // ISO 8601
+  updatedAt: string; // ISO 8601
 }
 
 export interface ServiceQuery {

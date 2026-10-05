@@ -1,0 +1,4 @@
+[
+  { "loginId": "bookplate", "password": "Bookplate2026!", "name": "Bookplate Tester", "role": "expert" },
+  { "loginId": "reviewer", "password": "Review2026!", "name": "Homework Reviewer", "role": "user" }
+]

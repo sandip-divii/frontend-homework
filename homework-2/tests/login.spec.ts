@@ -1,12 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
 import { expect, test, type Page } from "@playwright/test";
-import { MOCK_USERS } from "../src/data/users.mock";
+import users from "../db/seed/users.json";
 
 /** Temporary login (Figma: pc_1920_ID/PW 로그인). */
 const OUT_DIR = path.resolve("screenshots", "login");
 const WIDTHS = [1920, 1366, 768, 375] as const;
-const USER = MOCK_USERS[0];
+const USER = { id: users[0].loginId, password: users[0].password };
 
 /** The field error line (Next's route announcer also has role="alert"). */
 const fieldError = (page: Page) => page.locator("form p[role='alert']");

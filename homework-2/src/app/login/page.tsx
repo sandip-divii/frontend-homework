@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import { Header } from "@/components/layout/Header/Header";
 import { Footer } from "@/components/layout/Footer/Footer";
 import { LoginForm } from "@/features/auth/LoginForm";
-import { getSavedId } from "@/lib/auth/session";
+import { getSavedId } from "@/server/auth/session";
 import styles from "./page.module.scss";
 
 export const metadata: Metadata = {
   title: "Log in | Bookplate",
 };
 
-/** Figma: pc_1920_ID/PW 로그인 (node 3429-36106). */
+/** Figma: pc_1920_ID/PW 로그인 (node 3429-36106). Submits to POST /api/auth/login. */
 export default async function LoginPage() {
   const savedId = await getSavedId();
 

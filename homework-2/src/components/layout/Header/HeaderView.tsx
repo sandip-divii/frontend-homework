@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { Logo } from "@/components/ui/Logo/Logo";
-import { logout } from "@/features/auth/actions";
 import { cn } from "@/lib/cn";
+import { logout } from "@/services/auth";
 import styles from "./Header.module.scss";
 
 interface NavItem {
@@ -35,7 +36,9 @@ export interface HeaderViewProps {
  */
 export function HeaderView({ userName }: HeaderViewProps) {
   const navId = useId();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
   const loggedIn = userName !== undefined;
 
   useEffect(() => {
@@ -46,6 +49,17 @@ export function HeaderView({ userName }: HeaderViewProps) {
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [open]);
+
+  const onLogout = async () => {
+    setLoggingOut(true);
+    try {
+      await logout();
+      router.push("/login");
+      router.refresh();
+    } finally {
+      setLoggingOut(false);
+    }
+  };
 
   return (
     <header className={styles.header}>
@@ -88,11 +102,9 @@ export function HeaderView({ userName }: HeaderViewProps) {
                 </button>
               </li>
               <li className={styles.logoutItem}>
-                <form action={logout}>
-                  <button type="submit" className={styles.iconBtn} aria-label="Log out">
-                    <Icon name="logout" size={24} />
-                  </button>
-                </form>
+                <button type="button" className={styles.iconBtn} aria-label="Log out" onClick={onLogout} disabled={loggingOut}>
+                  <Icon name="logout" size={24} />
+                </button>
               </li>
             </>
           ) : (

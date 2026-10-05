@@ -1,12 +1,12 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/Button/Button";
 import { Checkbox } from "@/components/ui/Checkbox/Checkbox";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { TextField } from "@/components/ui/TextField/TextField";
-import { login } from "./actions";
-import { INITIAL_LOGIN_STATE } from "./loginState";
+import { useLogin } from "@/hooks/useLogin";
+import { LOGIN_MESSAGES } from "@/lib/validation/auth";
 import styles from "./LoginForm.module.scss";
 
 interface LoginFormProps {
@@ -15,16 +15,27 @@ interface LoginFormProps {
 }
 
 export function LoginForm({ defaultId = "" }: LoginFormProps) {
-  const [state, formAction, pending] = useActionState(login, INITIAL_LOGIN_STATE);
+  const { submit, pending, error } = useLogin("/");
   const [id, setId] = useState(defaultId);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [saveId, setSaveId] = useState(defaultId !== "");
+  const [localError, setLocalError] = useState<{ field: "id" | "password"; message: string } | null>(null);
 
-  const fieldError = (field: "id" | "password") => (state.error?.field === field ? state.error.message : undefined);
+  const shown = localError ?? error;
+  const fieldError = (field: "id" | "password") => (shown?.field === field ? shown.message : undefined);
+
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    // Same rules as the API (lib/validation/auth.ts) for instant feedback; the API stays authoritative.
+    if (!id.trim()) return setLocalError({ field: "id", message: LOGIN_MESSAGES.idRequired });
+    if (!password) return setLocalError({ field: "password", message: LOGIN_MESSAGES.passwordRequired });
+    setLocalError(null);
+    void submit({ id: id.trim(), password, saveId });
+  };
 
   return (
-    <form action={formAction} className={styles.form} noValidate aria-busy={pending}>
+    <form onSubmit={onSubmit} className={styles.form} noValidate aria-busy={pending}>
       <div className={styles.card}>
         <TextField
           id="login-id"
@@ -63,6 +74,11 @@ export function LoginForm({ defaultId = "" }: LoginFormProps) {
         <Checkbox name="saveId" checked={saveId} onChange={setSaveId}>
           Save ID
         </Checkbox>
+        {shown && !shown.field ? (
+          <p className={styles.formError} role="alert">
+            {shown.message}
+          </p>
+        ) : null}
       </div>
 
       <Button type="submit" size="xl" fullWidth disabled={pending} className={styles.submit}>

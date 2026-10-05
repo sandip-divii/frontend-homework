@@ -15,6 +15,8 @@ Next.js 16 (App Router, `src/`), React 19, TypeScript strict, **SCSS modules** (
 | Responsive screenshots + overflow/tap-target assertions | `npm run qa:responsive` (needs `npx playwright install chromium` once) |
 | Login flow checks + `/login` screenshots | `npm run qa:login` |
 | Production build | `npm run build` |
+| Create tables (idempotent) | `npm run db:migrate` |
+| Seed demo users + 50 services | `npm run db:seed` (`npm run db:reset` wipes and reseeds) |
 
 ## Source of truth
 
@@ -31,8 +33,14 @@ src/app/                      routes only (page.tsx, layout.tsx, route-level .mo
 src/components/ui/<Name>/     reusable primitives  (Button, Icon, Badge, Pagination, SortSelect, …)
 src/components/layout/<Name>/ page chrome          (Header, PageHero, Footer)
 src/components/service/<Name>/ domain components   (ServiceCard, ServiceGrid, ExpertBanner)
-src/features/<feature>/       stateful screen logic (PremiumServiceList)
-src/hooks/  src/lib/  src/data/  src/types/  src/styles/
+src/features/<feature>/       stateful screen logic (PremiumServiceList, LoginForm)
+src/hooks/                    data hooks (useExpertServices, useLogin) — the only place components get data from
+src/services/                 client-side API functions (fetch wrappers) used by hooks
+src/lib/validation/           zod schemas shared by API routes and forms
+src/server/                   server-only: db pool, env, http helpers, auth (password, token, session), repositories
+src/app/api/**/route.ts       route handlers (the "real API")
+db/                           schema.sql, migrate.mjs, seed.mjs, seed/users.json
+src/lib/  src/types/  src/styles/
 ```
 
 One component per folder: `Name.tsx` + `Name.module.scss`. Named exports, function declarations, `interface XProps` above the component.
@@ -48,10 +56,12 @@ One component per folder: `Name.tsx` + `Name.module.scss`. Named exports, functi
 
 - Reuse before creating: check `src/components/ui` first. Extend a primitive with a prop/variant rather than forking it.
 - Every list/data component has **loading, empty, error and filled** states. The list exposes `data-list-status` for QA and `?state=loading|empty|error` pins a state.
-- Server Components by default; add `"use client"` only where state/effects/events are required (currently HeaderView, PremiumServiceList, SearchField, SortSelect, CategoryTabs, LoginForm, hook). `Header` is a thin async Server Component that reads the session and renders `HeaderView`..
+- Server Components by default; add `"use client"` only where state/effects/events are required (currently HeaderView, PremiumServiceList, SearchField, SortSelect, CategoryTabs, LoginForm, hooks). `Header` is a thin async Server Component that reads the session and renders `HeaderView`.
 - Accessibility is non-negotiable: semantic elements, labels on icon buttons, `aria-current`, keyboard support for custom widgets, visible focus, ≥24px targets (asserted by the Playwright suite).
-- Data: `src/lib/api/services.ts` is a mock with a 700 ms delay. Keep the signature when wiring a real API.
-- Auth is a mock: demo accounts in `src/data/users.mock.ts`, cookie helpers in `src/lib/auth/session.ts`, server actions in `src/features/auth/actions.ts` (a `"use server"` file may export only async functions — constants live in `loginState.ts`). Never put real credentials in the repo.
+- **Data flow (service + hook pattern):** component → hook (`src/hooks`) → service (`src/services`, `apiFetch`) → route handler (`src/app/api`) → repository (`src/server/repositories`) → MySQL. Components never call `fetch` or the database directly. Server Components may call repositories directly (they are the backend).
+- **Database:** MariaDB/MySQL via `mysql2` pool (`src/server/db.ts`), `DATABASE_URL` in `.env.local` (see `.env.example`). Schema lives in `db/schema.sql`; change it there, keep it idempotent, re-run `npm run db:migrate`. Use `?` placeholders only — never string-concatenate values into SQL.
+- **API contract:** success returns the resource (or `PagedResult`), errors return `{ error: { message, fields? } }` with 400 / 401 / 404 / 422 / 503. Validation uses the zod schemas in `src/lib/validation` on the server (authoritative) and may reuse them in forms. Mutations require a session (401 otherwise).
+- **Auth:** `POST /api/auth/login` verifies scrypt hashes from `users` and sets an httpOnly HMAC-signed cookie (`bp_session`, 8 h); `GET /api/auth/me`, `POST /api/auth/logout`. Demo accounts are seeded from `db/seed/users.json` (dev only). Never commit real credentials or `.env.local`.
 
 ## Don't
 

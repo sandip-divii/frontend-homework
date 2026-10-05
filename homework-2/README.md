@@ -1,6 +1,36 @@
 # Homework 2 — A full feature with a real API (Bookplate)
 
-> **Status: bootstrapped from homework-1 on 2026-10-05.** Everything below still describes the homework-1 starting point (list screen, primitives, mock data, login). Replace this README as HW2 takes shape (Steps 3–8: real API, list / create / details / edit / delete, test cases, Playwright, QA build report).
+> **Status (2026-10-05):** connected to a real MariaDB database (`homework2`) with a Next.js route-handler API for services (list / create / detail / update / delete) and auth (login / logout / me). The list and login screens now use the API through the service + hook pattern. Still to do for HW2: create / edit / delete screens, test cases, QA build report.
+
+## Database & API
+
+**Setup (local XAMPP MariaDB, port 3307):**
+
+```bash
+cp .env.example .env.local      # set DATABASE_URL and a random SESSION_SECRET
+npm run db:migrate              # creates users + expert_services (idempotent)
+npm run db:seed                 # 2 demo users + 50 services (npm run db:reset wipes first)
+npm run dev                     # http://localhost:3001
+curl http://localhost:3001/api/health   # → {"ok":true,"database":"up"}
+```
+
+**Endpoints** (JSON; errors are `{ "error": { "message", "fields?" } }`):
+
+| Method | Path | Auth | Notes |
+| --- | --- | --- | --- |
+| GET | `/api/health` | – | DB connectivity |
+| GET | `/api/services?category&q&sort&page&pageSize` | – | `PagedResult<ExpertService>`; 422 on bad query |
+| POST | `/api/services` | session | body = `ServiceInput`; 201 · 422 |
+| GET | `/api/services/:id` | – | 404 when missing |
+| PUT | `/api/services/:id` | session | 200 · 404 · 422 |
+| DELETE | `/api/services/:id` | session | 204 · 404 |
+| POST | `/api/auth/login` | – | `{ id, password, saveId? }` → `{ user }` + cookies; 401 with `fields.id` / `fields.password` |
+| GET | `/api/auth/me` | session | `{ user }` or 401 |
+| POST | `/api/auth/logout` | – | clears the session cookie |
+
+Validation rules live once in `src/lib/validation` (zod) and are used by the API and reusable by forms. Passwords are stored as scrypt hashes; the session is an httpOnly, HMAC-signed cookie (8 h). Demo accounts: `db/seed/users.json`.
+
+**Data flow:** component → hook (`src/hooks`) → service (`src/services`) → route handler (`src/app/api`) → repository (`src/server/repositories`) → MySQL.
 
 ## Starting point (copied from Homework 1)
 
@@ -42,7 +72,7 @@ No `.env.local` is needed for the mock data. If one is introduced later, it stay
 
 ## Temporary login
 
-`/login` implements the Figma frame **pc_1920_ID/PW 로그인** (`node-id=3429-36106`) as a mock sign-in: no backend, a cookie session, and two demo accounts defined in [`src/data/users.mock.ts`](src/data/users.mock.ts) (ID `bookplate` / password `Bookplate2026!`, ID `reviewer` / password `Review2026!`).
+`/login` implements the Figma frame **pc_1920_ID/PW 로그인** (`node-id=3429-36106`) against `POST /api/auth/login`. Two demo accounts are seeded from [`db/seed/users.json`](db/seed/users.json) (ID `bookplate` / password `Bookplate2026!`, ID `reviewer` / password `Review2026!`).
 
 - Unknown ID → "This ID does not exist."; wrong password → "The ID and password do not match." (the two error states drawn in Figma).
 - **Save ID** remembers the ID in a cookie and pre-fills it next time; the eye button toggles password visibility.
@@ -71,11 +101,13 @@ src/components/ui/            Icon · Logo · Button · Badge · Skeleton · Emp
 src/components/layout/        Header · PageHero · Footer
 src/components/service/       ServiceCard (+ skeleton) · ServiceGrid (4 states) · ExpertBanner
 src/features/premium-service/ PremiumServiceList — composes the above, owns filter/sort/page state
-src/features/auth/            LoginForm + server actions (login / logout), TextField · Checkbox primitives in ui/
-src/lib/auth/session.ts       cookie session helpers (mock)
-src/hooks/useExpertServices   derived loading/success/empty/error, abortable
-src/lib/api/services.ts       mock API (700 ms delay) with filter / sort / paginate
-src/data/                     categories, sort options, 50 fake services
+src/features/auth/            LoginForm (uses useLogin → services/auth → /api/auth/*)
+src/services/ · src/hooks/    client API functions and the hooks components consume
+src/server/                   db pool, env, http helpers, auth (scrypt, HMAC token, session), repositories
+src/app/api/                  route handlers: services CRUD, auth, health
+db/                           schema.sql, migrate.mjs, seed.mjs, seed/users.json
+src/hooks/useExpertServices   derived loading/success/empty/error, abortable, calls /api/services
+src/data/categories.ts        tab + sort option labels
 src/styles/_tokens.scss       every colour / size / space as a CSS variable (Figma variables + derived)
 tests/responsive.spec.ts      Step-5 QA
 ```
