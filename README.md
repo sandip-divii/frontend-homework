@@ -24,6 +24,7 @@ No `.env.local` is needed for the mock data. If one is introduced later, it stay
 | `npm run lint` | ESLint (eslint-config-next, core-web-vitals + TypeScript) |
 | `npm run check` | both of the above |
 | `npm run qa:responsive` | Playwright: screenshots at 10 widths × 3 states, sideways-scroll and tap-target assertions (run `npx playwright install chromium` once) |
+| `npm run qa:login` | Playwright: login flow checks + screenshots of `/login` |
 | `npm run build` | production build |
 
 ## States
@@ -34,6 +35,15 @@ No `.env.local` is needed for the mock data. If one is introduced later, it stay
 | Empty | click the **Typo inspection** tab (no mock items), search for gibberish, or [`/?state=empty`](http://localhost:3000/?state=empty) |
 | Error | [`/?state=error`](http://localhost:3000/?state=error) — "Try again" re-runs the query |
 | Filled | default: 12 cards per page, 50 mock services across 3 categories, sort + pagination |
+
+## Temporary login
+
+`/login` implements the Figma frame **pc_1920_ID/PW 로그인** (`node-id=3429-36106`) as a mock sign-in: no backend, a cookie session, and two demo accounts defined in [`src/data/users.mock.ts`](src/data/users.mock.ts) (ID `bookplate` / password `Bookplate2026!`, ID `reviewer` / password `Review2026!`).
+
+- Unknown ID → "This ID does not exist."; wrong password → "The ID and password do not match." (the two error states drawn in Figma).
+- **Save ID** remembers the ID in a cookie and pre-fills it next time; the eye button toggles password visibility.
+- Success sets an `httpOnly` session cookie and redirects to the list; the header's logout icon clears it and returns to `/login`. The list itself is not gated so the demo stays open.
+- `npm run qa:login` runs the Playwright checks (errors, sign-in, remember-ID, logout, password toggle) and writes `screenshots/login/{1920,1366,768,375}[-error].png`.
 
 ## Responsive QA (Step 5)
 
@@ -56,6 +66,8 @@ src/components/ui/            Icon · Logo · Button · Badge · Skeleton · Emp
 src/components/layout/        Header · PageHero · Footer
 src/components/service/       ServiceCard (+ skeleton) · ServiceGrid (4 states) · ExpertBanner
 src/features/premium-service/ PremiumServiceList — composes the above, owns filter/sort/page state
+src/features/auth/            LoginForm + server actions (login / logout), TextField · Checkbox primitives in ui/
+src/lib/auth/session.ts       cookie session helpers (mock)
 src/hooks/useExpertServices   derived loading/success/empty/error, abortable
 src/lib/api/services.ts       mock API (700 ms delay) with filter / sort / paginate
 src/data/                     categories, sort options, 50 fake services

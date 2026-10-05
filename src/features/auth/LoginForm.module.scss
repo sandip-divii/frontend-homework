@@ -1,0 +1,42 @@
+@use "../../styles/mixins" as *;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+
+  @include down($bp-sm) {
+    gap: var(--space-6);
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-8);
+  background: var(--color-bg);
+
+  @include down($bp-sm) {
+    padding: var(--space-6);
+  }
+}
+
+.eye {
+  @include reset-button;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  color: var(--color-txt-1);
+
+  &:hover {
+    color: var(--color-txt-3);
+  }
+}
+
+.submit {
+  width: 100%;
+}

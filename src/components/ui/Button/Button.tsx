@@ -5,7 +5,7 @@ import { Icon, type IconName } from "@/components/ui/Icon/Icon";
 import styles from "./Button.module.scss";
 
 type Variant = "primary" | "outline" | "ghost";
-type Size = "lg" | "md";
+type Size = "xl" | "lg" | "md";
 
 export interface ButtonProps {
   variant?: Variant;
@@ -40,7 +40,7 @@ export function Button({
   const content = (
     <>
       <span className={styles.label}>{children}</span>
-      {icon ? <Icon name={icon} size={size === "lg" ? 24 : 20} className={styles.icon} /> : null}
+      {icon ? <Icon name={icon} size={size === "md" ? 20 : 24} className={styles.icon} /> : null}
     </>
   );
 

@@ -9,7 +9,8 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "check": "npm run typecheck && npm run lint",
-    "qa:responsive": "playwright test tests/responsive.spec.ts"
+    "qa:responsive": "playwright test tests/responsive.spec.ts",
+    "qa:login": "playwright test tests/login.spec.ts"
   },
   "dependencies": {
     "next": "16.3.8",

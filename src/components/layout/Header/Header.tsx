@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useEffect, useId, useState } from "react";
-import { Icon, type IconName } from "@/components/ui/Icon/Icon";
+import { Icon } from "@/components/ui/Icon/Icon";
 import { Logo } from "@/components/ui/Logo/Logo";
+import { logout } from "@/features/auth/actions";
 import { cn } from "@/lib/cn";
 import styles from "./Header.module.scss";
 
@@ -20,13 +21,6 @@ const NAV: readonly NavItem[] = [
   { label: "Premium service", href: "/", current: true },
   { label: "Bookplate Bookstore", href: "#" },
   { label: "Bookplate class", href: "#" },
-];
-
-const ACTIONS: ReadonlyArray<{ icon: IconName; label: string }> = [
-  { icon: "bell", label: "Notifications" },
-  { icon: "user", label: "My page" },
-  { icon: "cart", label: "Cart" },
-  { icon: "logout", label: "Log out" },
 ];
 
 export function Header() {
@@ -65,13 +59,28 @@ export function Header() {
         </nav>
 
         <ul className={styles.actions} aria-label="Account">
-          {ACTIONS.map((action) => (
-            <li key={action.icon} className={cn(action.icon === "logout" && styles.logoutItem)}>
-              <button type="button" className={styles.iconBtn} aria-label={action.label}>
-                <Icon name={action.icon} size={24} />
+          <li>
+            <button type="button" className={styles.iconBtn} aria-label="Notifications">
+              <Icon name="bell" size={24} />
+            </button>
+          </li>
+          <li>
+            <Link href="/login" className={styles.iconBtn} aria-label="My page / log in">
+              <Icon name="user" size={24} />
+            </Link>
+          </li>
+          <li>
+            <button type="button" className={styles.iconBtn} aria-label="Cart">
+              <Icon name="cart" size={24} />
+            </button>
+          </li>
+          <li className={styles.logoutItem}>
+            <form action={logout}>
+              <button type="submit" className={styles.iconBtn} aria-label="Log out">
+                <Icon name="logout" size={24} />
               </button>
-            </li>
-          ))}
+            </form>
+          </li>
         </ul>
 
         <button

@@ -44,3 +44,19 @@ Checklist run before building (Step 2.1). ✅ ok · ⚠️ built with an assumpt
 | Card meta | 11px | 12px | Q9 / legibility |
 | Banner photo | raster | gradient + highlight | asset not exportable |
 | Logo | raster BI | wordmark + SVG swoosh | asset not exportable |
+
+---
+
+# Design check — pc_1920_ID/PW 로그인 (login)
+
+Read through Figma Dev Mode in Chrome (the MCP quota was exhausted). Specs captured: section 1920×782 on `#F2EFEA` with 100px vertical padding; 600px column, gap 40; title `pc/1depth_tit` (Nanum Myeongjo 32/800, −0.96px, centred); white card padding 40, inner gap 20; labels Pretendard 18/500 `txt1`, 20px above the box; box 60px, padding 22/20, 1px `line1`, placeholder 16/400 `line1`; error 12/500 `point/02`, 10px below the box; checkbox 30×30 with label `pc/3depth_sub` 16/500 `txt3`; button 600×80 `txt1` with 22/600 white label; header `gnb_로그인후`; footer.
+
+| # | Check | Result | Note |
+| --- | --- | --- | --- |
+| 1 | Breakpoints | ❓ | 1920 only. Column caps at 600px and shrinks with 20px gutters; card padding 24 and 48px controls ≤768. |
+| 2 | Copy | ⚠️ | Frame is Korean; the rest of the English site uses English, so copy was translated 1:1 (`ID / PW Login`, `Enter your ID`, `Save ID`, `Log in`, the two error messages). Confirm wording. |
+| 3 | States | ⚠️ | Figma shows both field errors at once (a state sheet). Live form shows one error at a time, plus "required" messages Figma does not have. No focus / disabled / loading states drawn — added (border darkens on focus, button disabled while submitting). |
+| 4 | Placeholder colour | ⚠️ | `line1 #CCC` here vs `#B5B5B5` on the list search box — two placeholder greys in one system. |
+| 5 | Checkbox row | ❓ | Auto-layout is `space-between` but has one child. Is a "Find ID / password" link intended on the right? |
+| 6 | Header | ❓ | Login page uses the logged-in header (`gnb_로그인후`). Is there a logged-out header variant? |
+| 7 | Assets | ⚠️ | `eye_2` (31×25) and `check_box` (30×30) icons could not be exported; drawn as inline SVG. |

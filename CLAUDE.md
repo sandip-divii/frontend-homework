@@ -11,6 +11,7 @@ Next.js 16 (App Router, `src/`), React 19, TypeScript strict, **SCSS modules** (
 | Lint | `npm run lint` |
 | Both | `npm run check` |
 | Responsive screenshots + overflow/tap-target assertions | `npm run qa:responsive` (needs `npx playwright install chromium` once) |
+| Login flow checks + `/login` screenshots | `npm run qa:login` |
 | Production build | `npm run build` |
 
 ## Source of truth
@@ -48,6 +49,7 @@ One component per folder: `Name.tsx` + `Name.module.scss`. Named exports, functi
 - Server Components by default; add `"use client"` only where state/effects/events are required (currently Header, PremiumServiceList, SearchField, SortSelect, CategoryTabs, hook).
 - Accessibility is non-negotiable: semantic elements, labels on icon buttons, `aria-current`, keyboard support for custom widgets, visible focus, ≥24px targets (asserted by the Playwright suite).
 - Data: `src/lib/api/services.ts` is a mock with a 700 ms delay. Keep the signature when wiring a real API.
+- Auth is a mock: demo accounts in `src/data/users.mock.ts`, cookie helpers in `src/lib/auth/session.ts`, server actions in `src/features/auth/actions.ts` (a `"use server"` file may export only async functions — constants live in `loginState.ts`). Never put real credentials in the repo.
 
 ## Don't
 

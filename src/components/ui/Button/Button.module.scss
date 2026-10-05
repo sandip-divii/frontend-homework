@@ -52,6 +52,19 @@
   font-size: var(--text-base);
 }
 
+// Login submit: 80px tall, 22px label (Figma "btn")
+.xl {
+  min-height: 80px;
+  padding: 0 var(--space-9);
+  font-size: var(--text-2xl-sm);
+
+  @include down($bp-sm) {
+    min-height: var(--control-h);
+    padding: 0 var(--space-6);
+    font-size: var(--text-lg);
+  }
+}
+
 // Variants
 .primary {
   background: var(--color-txt-1);
