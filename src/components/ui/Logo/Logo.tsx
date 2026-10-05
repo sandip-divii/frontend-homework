@@ -20,10 +20,10 @@ export function Logo({ href = "/", className }: LogoProps) {
         북플레이트
       </span>
       <svg className={styles.swoosh} viewBox="0 0 180 60" aria-hidden="true" focusable="false">
-        {/* Lower stroke: one deep sweep from the left point up to the top-right tail.
-            Upper stroke: nearly straight, crosses the tail near x≈145 and overshoots a little. */}
+        {/* Upper stroke: nearly straight, runs from the left point all the way to the far right (the tail).
+            Lower stroke: deep arc that rises steeply, crosses the upper line near x≈140 and stops just past it. */}
         <path
-          d="M4 22 C 20 70, 110 72, 178 6 M4 22 C 50 38, 110 40, 164 31"
+          d="M4 22 C 50 44, 120 40, 180 19 M4 22 C 20 68, 110 72, 157 14"
           fill="none"
           stroke="currentColor"
           strokeWidth="1.2"
