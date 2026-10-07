@@ -30,21 +30,21 @@ export function ServiceCard({ service, priority = false }: ServiceCardProps) {
         <p className={styles.author}>{service.author}</p>
         <h3 className={styles.title}>
           {/* Stretched link: the whole card is clickable, one tab stop. */}
-          <Link href={href} className={styles.titleLink}>
+          <Link href={href} className={styles["title-link"]}>
             {service.title}
           </Link>
         </h3>
         <p className={styles.price}>{formatPrice(service.price)}</p>
 
         <ul className={styles.meta}>
-          <li className={styles.metaItem}>
+          <li className={styles["meta-item"]}>
             <Icon name="heart" size={20} className={styles.heart} />
             <span>
               <span className="sr-only">Likes </span>
               {service.likes}
             </span>
           </li>
-          <li className={styles.metaItem}>
+          <li className={styles["meta-item"]}>
             <Icon name="star" size={20} className={styles.star} />
             <span>
               <span className="sr-only">Rating </span>
@@ -66,8 +66,8 @@ export function ServiceCardSkeleton() {
       </div>
       <div className={styles.body}>
         <Skeleton width="80px" height="13px" />
-        <Skeleton width="60%" height="18px" className={styles.skelTitle} />
-        <Skeleton width="56px" height="13px" className={styles.skelPrice} />
+        <Skeleton width="60%" height="18px" className={styles["skel-title"]} />
+        <Skeleton width="56px" height="13px" className={styles["skel-price"]} />
         <div className={styles.meta}>
           <Skeleton width="40px" height="20px" />
           <Skeleton width="72px" height="20px" />

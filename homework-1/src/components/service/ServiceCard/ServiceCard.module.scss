@@ -46,16 +46,16 @@
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  min-height: 280px;
-  padding: 36px var(--space-8) var(--space-8);
+  min-height: var(--card-body-min-h);
+  padding: var(--card-body-pad-top) var(--space-8) var(--space-8);
 
   @include down($bp-lg) {
-    min-height: 240px;
+    min-height: var(--card-body-min-h-lg);
     padding: var(--space-7) var(--space-6) var(--space-6);
   }
 
   @include down($bp-md) {
-    min-height: 200px;
+    min-height: var(--card-body-min-h-md);
     padding: var(--space-6) var(--space-5) var(--space-5);
   }
 }
@@ -79,7 +79,7 @@
   }
 }
 
-.titleLink {
+.title-link {
   &::after {
     content: "";
     position: absolute;
@@ -113,7 +113,7 @@
   color: var(--color-txt-2);
 }
 
-.metaItem {
+.meta-item {
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
@@ -127,10 +127,10 @@
   color: var(--color-point-1);
 }
 
-.skelTitle {
+.skel-title {
   margin-top: var(--space-6);
 }
 
-.skelPrice {
+.skel-price {
   margin-top: var(--space-6);
 }

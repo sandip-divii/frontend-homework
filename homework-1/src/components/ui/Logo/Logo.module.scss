@@ -3,20 +3,20 @@
 .logo {
   position: relative;
   display: block;
-  width: 180px;
-  height: 60px;
+  width: var(--logo-w);
+  height: var(--logo-h);
   color: var(--color-txt-1);
 
   @include down($bp-tab) {
-    width: 132px;
-    height: 44px;
+    width: var(--logo-w-sm);
+    height: var(--logo-h-sm);
   }
 }
 
 .word {
   position: absolute;
   top: 0;
-  left: 26px;
+  left: var(--logo-text-x);
   z-index: 1;
   font-family: var(--font-serif);
   font-size: var(--text-xl);
@@ -26,7 +26,7 @@
   white-space: nowrap;
 
   @include down($bp-tab) {
-    left: 18px;
+    left: var(--logo-text-x-sm);
     font-size: var(--text-md);
   }
 }

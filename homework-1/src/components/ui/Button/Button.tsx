@@ -36,7 +36,7 @@ export function Button({
   onClick,
   "aria-label": ariaLabel,
 }: ButtonProps) {
-  const classes = cn(styles.button, styles[variant], styles[size], fullWidth && styles.fullWidth, className);
+  const classes = cn(styles.button, styles[variant], styles[size], fullWidth && styles["full-width"], className);
   const content = (
     <>
       <span className={styles.label}>{children}</span>

@@ -25,7 +25,7 @@ export function Footer() {
           <ul className={styles.social} aria-label="Social media">
             {SOCIAL.map((s) => (
               <li key={s.icon}>
-                <a href={s.href} className={styles.socialLink} aria-label={s.label}>
+                <a href={s.href} className={styles["social-link"]} aria-label={s.label}>
                   <Icon name={s.icon} size={18} />
                 </a>
               </li>

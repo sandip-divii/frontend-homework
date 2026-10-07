@@ -3,7 +3,7 @@
 .badge {
   display: inline-flex;
   align-items: center;
-  min-height: 42px;
+  min-height: var(--badge-h);
   padding: 0 var(--space-5);
   background: var(--color-primary-3);
   color: var(--color-white);
@@ -13,7 +13,7 @@
   white-space: nowrap;
 
   @include down($bp-md) {
-    min-height: 32px;
+    min-height: var(--badge-h-sm);
     padding: 0 var(--space-4);
     font-size: var(--text-xs);
   }

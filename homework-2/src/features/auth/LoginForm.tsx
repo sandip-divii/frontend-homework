@@ -75,7 +75,7 @@ export function LoginForm({ defaultId = "" }: LoginFormProps) {
           Save ID
         </Checkbox>
         {shown && !shown.field ? (
-          <p className={styles.formError} role="alert">
+          <p className={styles["form-error"]} role="alert">
             {shown.message}
           </p>
         ) : null}

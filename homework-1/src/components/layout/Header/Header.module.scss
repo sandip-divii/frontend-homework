@@ -1,8 +1,5 @@
 @use "../../../styles/mixins" as *;
 
-// Full text nav needs ~1270px (logo + 5 links + icons); collapse to a menu button below 1366.
-$bp-nav: 1365px;
-
 .header {
   position: relative;
   z-index: var(--z-header);
@@ -25,7 +22,7 @@ $bp-nav: 1365px;
 .nav {
   flex: 1 1 auto;
   min-width: 0;
-  margin-left: clamp(24px, 3vw, 60px);
+  margin-left: clamp(var(--space-6), 3vw, var(--nav-offset-max));
 
   @include down($bp-nav) {
     display: none;
@@ -38,20 +35,20 @@ $bp-nav: 1365px;
     background: var(--color-bg);
     border-top: 1px solid var(--color-line-2);
     border-bottom: 1px solid var(--color-line-2);
-    box-shadow: 0 12px 24px var(--color-overlay);
+    box-shadow: var(--shadow-nav);
   }
 }
 
-.navOpen {
+.nav-open {
   @include down($bp-nav) {
     display: block;
   }
 }
 
-.navList {
+.nav-list {
   display: flex;
   align-items: center;
-  gap: clamp(16px, 1.6vw, 32px);
+  gap: clamp(var(--space-4), 1.6vw, var(--nav-gap-max));
 
   @include down($bp-nav) {
     flex-direction: column;
@@ -60,7 +57,7 @@ $bp-nav: 1365px;
   }
 }
 
-.navLink {
+.nav-link {
   position: relative;
   display: inline-flex;
   padding: var(--space-2) 0;
@@ -101,7 +98,7 @@ $bp-nav: 1365px;
   }
 }
 
-.navCurrent {
+.nav-current {
   font-weight: var(--weight-semibold);
   color: var(--color-txt-1);
 
@@ -117,14 +114,14 @@ $bp-nav: 1365px;
   margin-left: auto;
 }
 
-.iconBtn {
+.icon-btn {
   @include reset-button;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: var(--size-icon-btn);
+  height: var(--size-icon-btn);
   color: var(--color-txt-1);
   transition: color var(--dur-fast) var(--ease);
 
@@ -133,13 +130,13 @@ $bp-nav: 1365px;
   }
 }
 
-.logoutItem {
+.logout-item {
   @include down($bp-xxs) {
     display: none;
   }
 }
 
-.menuBtn {
+.menu-btn {
   @include reset-button;
 
   display: none;

@@ -55,8 +55,8 @@
 
   svg {
     @include down($bp-sm) {
-      width: 24px;
-      height: 24px;
+      width: var(--size-search-icon-sm);
+      height: var(--size-search-icon-sm);
     }
   }
 }

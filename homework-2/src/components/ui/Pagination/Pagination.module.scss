@@ -26,8 +26,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 32px;
-  height: 32px;
+  min-width: var(--size-page-btn);
+  height: var(--size-page-btn);
   padding: 0 var(--space-1);
   font-size: var(--text-md);
   line-height: var(--leading-none);

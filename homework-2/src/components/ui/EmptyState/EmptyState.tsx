@@ -16,7 +16,7 @@ interface EmptyStateProps {
 export function EmptyState({ icon = "inbox", title, description, action, tone = "neutral", className }: EmptyStateProps) {
   return (
     <div className={cn(styles.empty, tone === "error" && styles.error, className)} role="status">
-      <span className={styles.iconWrap}>
+      <span className={styles["icon-wrap"]}>
         <Icon name={icon} size={32} />
       </span>
       <p className={styles.title}>{title}</p>

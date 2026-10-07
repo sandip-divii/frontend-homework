@@ -96,7 +96,7 @@ export function SortSelect<T extends string>({ value, options, onChange, label =
         onKeyDown={onTriggerKeyDown}
       >
         <span className={styles.value}>{current.label}</span>
-        <Icon name="chevronDown" size={12} strokeWidth={2} className={cn(styles.chevron, open && styles.chevronOpen)} />
+        <Icon name="chevronDown" size={12} strokeWidth={2} className={cn(styles.chevron, open && styles["chevron-open"])} />
       </button>
 
       {open ? (
@@ -110,7 +110,7 @@ export function SortSelect<T extends string>({ value, options, onChange, label =
               role="option"
               aria-selected={option.id === value}
               tabIndex={-1}
-              className={cn(styles.option, option.id === value && styles.optionActive)}
+              className={cn(styles.option, option.id === value && styles["option-active"])}
               onClick={() => select(option.id)}
               onKeyDown={(e) => onOptionKeyDown(e, index)}
             >

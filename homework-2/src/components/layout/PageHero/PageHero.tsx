@@ -29,7 +29,7 @@ export function PageHero({ breadcrumb, title }: PageHeroProps) {
                       <Icon name="arrowRight" size={16} />
                     </li>
                   ) : null}
-                  <li className={last ? styles.crumbCurrent : styles.crumb}>
+                  <li className={last ? styles["crumb-current"] : styles.crumb}>
                     {crumb.href && !last ? (
                       <Link href={crumb.href}>{crumb.label}</Link>
                     ) : (

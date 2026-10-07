@@ -52,13 +52,13 @@ export function HeaderView({ userName }: HeaderViewProps) {
       <div className={styles.inner}>
         <Logo />
 
-        <nav id={navId} className={cn(styles.nav, open && styles.navOpen)} aria-label="Primary">
-          <ul className={styles.navList}>
+        <nav id={navId} className={cn(styles.nav, open && styles["nav-open"])} aria-label="Primary">
+          <ul className={styles["nav-list"]}>
             {NAV.map((item) => (
               <li key={item.label}>
                 <Link
                   href={item.href}
-                  className={cn(styles.navLink, item.current && styles.navCurrent)}
+                  className={cn(styles["nav-link"], item.current && styles["nav-current"])}
                   aria-current={item.current ? "page" : undefined}
                   onClick={() => setOpen(false)}
                 >
@@ -73,23 +73,23 @@ export function HeaderView({ userName }: HeaderViewProps) {
           {loggedIn ? (
             <>
               <li>
-                <button type="button" className={styles.iconBtn} aria-label="Notifications">
+                <button type="button" className={styles["icon-btn"]} aria-label="Notifications">
                   <Icon name="bell" size={24} />
                 </button>
               </li>
               <li>
-                <button type="button" className={styles.iconBtn} aria-label={`My page (${userName})`}>
+                <button type="button" className={styles["icon-btn"]} aria-label={`My page (${userName})`}>
                   <Icon name="user" size={24} />
                 </button>
               </li>
               <li>
-                <button type="button" className={styles.iconBtn} aria-label="Cart">
+                <button type="button" className={styles["icon-btn"]} aria-label="Cart">
                   <Icon name="cart" size={24} />
                 </button>
               </li>
-              <li className={styles.logoutItem}>
+              <li className={styles["logout-item"]}>
                 <form action={logout}>
-                  <button type="submit" className={styles.iconBtn} aria-label="Log out">
+                  <button type="submit" className={styles["icon-btn"]} aria-label="Log out">
                     <Icon name="logout" size={24} />
                   </button>
                 </form>
@@ -98,12 +98,12 @@ export function HeaderView({ userName }: HeaderViewProps) {
           ) : (
             <>
               <li>
-                <Link href="/login" className={styles.iconBtn} aria-label="My page — log in required">
+                <Link href="/login" className={styles["icon-btn"]} aria-label="My page — log in required">
                   <Icon name="user" size={24} />
                 </Link>
               </li>
               <li>
-                <Link href="/login" className={styles.iconBtn} aria-label="Log in">
+                <Link href="/login" className={styles["icon-btn"]} aria-label="Log in">
                   <Icon name="login" size={24} />
                 </Link>
               </li>
@@ -113,7 +113,7 @@ export function HeaderView({ userName }: HeaderViewProps) {
 
         <button
           type="button"
-          className={styles.menuBtn}
+          className={styles["menu-btn"]}
           aria-expanded={open}
           aria-controls={navId}
           aria-label={open ? "Close menu" : "Open menu"}

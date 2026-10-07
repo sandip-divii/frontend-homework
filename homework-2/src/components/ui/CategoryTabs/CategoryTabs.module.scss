@@ -32,7 +32,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 24px; // keeps short labels ("All") a valid tap target
+  min-width: var(--tap-min-sm); // keeps short labels ("All") a valid tap target
   min-height: var(--control-h-sm);
   font-size: var(--text-base);
   line-height: var(--leading-none);

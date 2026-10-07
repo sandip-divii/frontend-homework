@@ -32,8 +32,8 @@
 
 // Sizes
 .lg {
-  min-height: 70px;
-  min-width: 380px;
+  min-height: var(--btn-h-lg);
+  min-width: var(--btn-w-lg);
   padding: 0 var(--space-8);
   font-size: var(--text-lg);
 
@@ -54,7 +54,7 @@
 
 // Login submit: 80px tall, 22px label (Figma "btn")
 .xl {
-  min-height: 80px;
+  min-height: var(--btn-h-xl);
   padding: 0 var(--space-9);
   font-size: var(--text-2xl-sm);
 
@@ -98,6 +98,6 @@
   }
 }
 
-.fullWidth {
+.full-width {
   width: 100%;
 }

@@ -49,7 +49,8 @@ One component per folder: `Name.tsx` + `Name.module.scss`. Named exports, functi
 
 - Every colour, font size, weight, spacing and radius comes from `src/styles/_tokens.scss` as a CSS custom property. **No raw hex or magic px in component SCSS** — add a token first if one is missing, and note in the token comment whether it came from a Figma variable or was read off the frame.
 - Breakpoints and shared mixins live in `src/styles/_mixins.scss`; import with `@use "../../../styles/mixins" as *;` and use `@include down($bp-md)`. Breakpoints: 1600 / 1366 / 1024 / 991 / 768 / 640 / 480.
-- Class names in modules are camelCase, scoped to the component, named by role not appearance (`.titleLink`, `.navCurrent`, not `.bold`, `.mt20`). Modifier classes are adjectives (`.active`, `.navOpen`, `.optionActive`).
+- Class names are **lowercase-with-hyphens** (WM rule: `main-container`, never `mainContainer` or `main_container`), scoped to the component, named by role not appearance (`.title-link`, `.nav-current`, not `.bold`, `.mt20`). Modifier classes are adjectives (`.active`, `.nav-open`, `.option-active`). In TSX read them with bracket access: `styles["title-link"]`.
+- No fixed pixel sizes inside component SCSS (only `1px` borders and `2px` focus outlines). Widths, heights and shadows are tokens in `_tokens.scss` (`--size-icon-btn`, `--card-body-min-h`, `--shadow-menu`, …); breakpoints are the `$bp-*` variables in `_mixins.scss`.
 - Fonts: Pretendard (body, via jsDelivr CSS link in `layout.tsx`) and Nanum Myeongjo (headings, `next/font/google`). Use `var(--font-sans)` / `var(--font-serif)`.
 
 **Behaviour**

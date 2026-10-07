@@ -6,6 +6,7 @@ $bp-tab: 991px;
 $bp-sm: 768px;
 $bp-xs: 640px;
 $bp-xxs: 480px;
+$bp-nav: 1365px; // full text nav needs ~1270px (logo + 5 links + icons); collapse below 1366
 
 @mixin down($bp) {
   @media (max-width: $bp) {

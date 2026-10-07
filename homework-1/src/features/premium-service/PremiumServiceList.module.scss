@@ -31,8 +31,8 @@
 }
 
 .search {
-  flex: 0 1 480px;
-  min-width: 320px;
+  flex: 0 1 var(--search-basis);
+  min-width: var(--search-min-w);
 
   @include down($bp-md) {
     flex: 1 1 100%;

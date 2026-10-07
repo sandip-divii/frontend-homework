@@ -39,7 +39,7 @@ A list screen built from the Figma frame **pc_1920_Expert Services (See More)** 
 | | |
 | --- | --- |
 | **Demo** | _pending deploy_ — run locally with `npm run dev` (see below) or deploy with `npx vercel` |
-| **Repo** | https://github.com/sandip-divii/frontend-homework (private) — this homework lives in [`homework-2/`](https://github.com/sandip-divii/frontend-homework/tree/main/homework-2) |
+| **Repo** | https://github.com/sandip-divii/frontend-homework (public) — this homework lives in [`homework-2/`](https://github.com/sandip-divii/frontend-homework/tree/main/homework-2) |
 | **Figma** | https://www.figma.com/design/7yxIdnZegxBVEiqyV3oQmA/XP-%7C-Bookplate-design?node-id=1600-38779 |
 | **Reference render** | [`docs/figma-reference-1920.png`](docs/figma-reference-1920.png) |
 
@@ -112,7 +112,7 @@ src/styles/_tokens.scss       every colour / size / space as a CSS variable (Fig
 tests/responsive.spec.ts      Step-5 QA
 ```
 
-Design rules followed: SCSS modules only, **no hardcoded colours** (every value is a token in `_tokens.scss`, with its Figma variable name in a comment), role-based camelCase class names, one component per folder, Server Components by default.
+Design rules followed: SCSS modules only, **no hardcoded colours** (every value is a token in `_tokens.scss`, with its Figma variable name in a comment), lowercase-with-hyphens class names (WM), no fixed px sizes in components, one component per folder, Server Components by default.
 
 ## Design check & assumptions
 

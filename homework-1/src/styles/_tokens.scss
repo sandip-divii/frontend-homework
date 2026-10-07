@@ -75,6 +75,48 @@
   --control-h-sm: 48px;
   --card-thumb-ratio: 413 / 240;
   --tap-min: 44px;
+  --tap-min-sm: 24px; // smallest acceptable target for inline text controls (tabs)
+
+  // ── Component sizes (read off the Figma frames; no fixed px in component SCSS) ──
+  --control-h-xs: 40px; // sort dropdown
+  --size-icon-btn: 40px; // header account icons
+  --size-social-btn: 36px; // footer social squares
+  --size-checkbox: 30px; // Figma check_box 30×30
+  --size-page-btn: 32px; // pagination numbers / arrows
+  --size-empty-icon: 72px;
+  --size-search-icon-sm: 24px;
+  --logo-w: 180px; // Figma bi 180×60
+  --logo-h: 60px;
+  --logo-w-sm: 132px;
+  --logo-h-sm: 44px;
+  --logo-text-x: 26px;
+  --logo-text-x-sm: 18px;
+  --rule-accent-w: 148px; // step1 short rule
+  --rule-accent-w-sm: 96px;
+  --badge-h: 42px;
+  --badge-h-sm: 32px;
+  --card-body-min-h: 280px; // card 520 − image 240
+  --card-body-min-h-lg: 240px;
+  --card-body-min-h-md: 200px;
+  --card-body-pad-top: 36px;
+  --empty-min-h: 420px;
+  --empty-min-h-sm: 320px;
+  --empty-text-max-w: 420px;
+  --btn-h-lg: 70px; // con3 buttons
+  --btn-w-lg: 380px;
+  --btn-h-xl: 80px; // login button
+  --banner-pad-y: 120px;
+  --banner-content-max-w: 1100px;
+  --search-basis: 480px;
+  --search-min-w: 320px;
+  --sort-min-w: 100px;
+  --form-max-w: 600px; // login column
+  --nav-gap-max: 32px;
+  --nav-offset-max: 60px;
+
+  // ── Shadows ───────────────────────────────────────────────────────────────
+  --shadow-menu: 0 8px 24px var(--color-overlay);
+  --shadow-nav: 0 12px 24px var(--color-overlay);
 
   // ── Motion ───────────────────────────────────────────────────────────────
   --ease: cubic-bezier(0.2, 0, 0, 1);

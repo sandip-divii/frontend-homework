@@ -43,7 +43,7 @@ export function TextField({
       <label htmlFor={id} className={styles.label}>
         {label}
       </label>
-      <div className={cn(styles.box, error && styles.boxInvalid)}>
+      <div className={cn(styles.box, error && styles["box-invalid"])}>
         <input
           id={id}
           name={name}
