@@ -10,8 +10,8 @@ Written as a hand-over to QA: everything needed to test is on this page or linke
 | Repository | https://github.com/sandip-divii/frontend-homework (public) |
 | Branch | `main` |
 | Folder | `homework-2/` |
-| Commit | `{{COMMIT}}` — {{COMMIT_SUBJECT}} |
-| Date | {{DATE}} |
+| Commit | `04d331e` — Homework 2: create / edit / delete screens, roles, WM formats, tests, docs |
+| Date | 2026-10-07 |
 | Run | locally (see part 6); no hosted demo because the API needs the local MariaDB |
 
 ## 2. TL tasks covered
@@ -86,10 +86,45 @@ Full cases with IDs, preconditions, steps and expected results: [`docs/TEST-CASE
 
 ## 9. Results of lint, type-check, build and tests
 
-Real output, captured on {{DATE}}:
+Real output, captured on 2026-10-07:
 
 ```text
-{{CHECKS}}
+$ npx tsc --noEmit
+exit code: 0
+
+$ npm run lint
+exit code: 0
+
+$ npm run build
+✓ Compiled successfully in 1437ms
+  Running TypeScript ...
+  Finished TypeScript in 2.1s ...
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/me
+├ ƒ /api/health
+├ ƒ /api/services
+├ ƒ /api/services/[id]
+├ ƒ /login
+├ ƒ /premium-service/[id]
+├ ƒ /premium-service/[id]/edit
+└ ƒ /premium-service/new
+ƒ  (Dynamic)  server-rendered on demand
+exit code: 0
+
+$ npm run test:e2e
+Running 66 tests using 1 worker
+66 passed (1.4m)
+
+$ npm run test:e2e:mutation
+Running 3 tests using 1 worker
+ok 1 [mutation] › tests\services.mutation.spec.ts:29:7 › create → list → edit → delete › create through the 
+ok 2 [mutation] › tests\services.mutation.spec.ts:52:7 › create → list → edit → delete › edit pre-fills the 
+ok 3 [mutation] › tests\services.mutation.spec.ts:66:7 › create → list → edit → delete › delete asks for con
+3 passed (7.5s)
 ```
 
 ## 10. Screen sizes and browsers checked
