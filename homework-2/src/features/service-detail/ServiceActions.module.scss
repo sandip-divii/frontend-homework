@@ -1,0 +1,18 @@
+@use "../../styles/mixins" as *;
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.danger {
+  border-color: var(--color-point-2);
+  color: var(--color-point-2);
+
+  &:hover:not(:disabled) {
+    background: var(--color-point-2);
+    border-color: var(--color-point-2);
+    color: var(--color-white);
+  }
+}

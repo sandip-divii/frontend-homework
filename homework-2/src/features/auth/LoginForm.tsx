@@ -12,10 +12,12 @@ import styles from "./LoginForm.module.scss";
 interface LoginFormProps {
   /** ID remembered by the "Save ID" checkbox (read from a cookie on the server). */
   defaultId?: string;
+  /** Same-origin path to open after a successful login (validated by the page). */
+  redirectTo?: string;
 }
 
-export function LoginForm({ defaultId = "" }: LoginFormProps) {
-  const { submit, pending, error } = useLogin("/");
+export function LoginForm({ defaultId = "", redirectTo = "/" }: LoginFormProps) {
+  const { submit, pending, error } = useLogin(redirectTo);
   const [id, setId] = useState(defaultId);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);

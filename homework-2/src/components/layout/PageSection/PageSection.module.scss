@@ -1,0 +1,25 @@
+@use "../../../styles/mixins" as *;
+
+.section {
+  padding: var(--space-15) 0;
+
+  @include down($bp-sm) {
+    padding: var(--space-10) 0;
+  }
+
+  @include down($bp-xxs) {
+    padding: var(--space-8) 0;
+  }
+}
+
+.soft {
+  background: var(--color-bg-soft);
+}
+
+.inner {
+  @include container;
+}
+
+.narrow {
+  max-width: calc(var(--form-max-w) + var(--gutter) * 2);
+}

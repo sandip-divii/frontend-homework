@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { canManageServices, ROLE_MESSAGES } from "@/lib/auth/roles";
 import { serviceInputSchema } from "@/lib/validation/service";
 import { getSessionFromRequest } from "@/server/auth/session";
 import { jsonError, parseId, readJson, validationError } from "@/server/http";
@@ -8,7 +9,14 @@ export const dynamic = "force-dynamic";
 
 type Context = { params: Promise<{ id: string }> };
 
-/** GET /api/services/:id → 200 ExpertService · 404 */
+async function requireManager(req: NextRequest) {
+  const user = await getSessionFromRequest(req);
+  if (!user) return { error: jsonError(401, ROLE_MESSAGES.loginRequired) };
+  if (!canManageServices(user)) return { error: jsonError(403, ROLE_MESSAGES.forbidden) };
+  return { user };
+}
+
+/** GET /api/services/:id → 200 ExpertService · 400 · 404 */
 export async function GET(_req: NextRequest, { params }: Context) {
   const id = parseId((await params).id);
   if (!id) return jsonError(400, "Invalid service id.");
@@ -17,10 +25,10 @@ export async function GET(_req: NextRequest, { params }: Context) {
   return NextResponse.json(service);
 }
 
-/** PUT /api/services/:id  ServiceInput (signed in only) → 200 ExpertService · 401 · 404 · 422 */
+/** PUT /api/services/:id  ServiceInput (expert / admin) → 200 ExpertService · 401 · 403 · 404 · 422 */
 export async function PUT(req: NextRequest, { params }: Context) {
-  const user = await getSessionFromRequest(req);
-  if (!user) return jsonError(401, "Please log in to edit a service.");
+  const auth = await requireManager(req);
+  if ("error" in auth) return auth.error;
 
   const id = parseId((await params).id);
   if (!id) return jsonError(400, "Invalid service id.");
@@ -33,10 +41,10 @@ export async function PUT(req: NextRequest, { params }: Context) {
   return NextResponse.json(updated);
 }
 
-/** DELETE /api/services/:id (signed in only) → 204 · 401 · 404 */
+/** DELETE /api/services/:id (expert / admin) → 204 · 401 · 403 · 404 */
 export async function DELETE(req: NextRequest, { params }: Context) {
-  const user = await getSessionFromRequest(req);
-  if (!user) return jsonError(401, "Please log in to delete a service.");
+  const auth = await requireManager(req);
+  if ("error" in auth) return auth.error;
 
   const id = parseId((await params).id);
   if (!id) return jsonError(400, "Invalid service id.");

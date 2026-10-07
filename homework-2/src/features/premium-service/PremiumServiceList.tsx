@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { Button } from "@/components/ui/Button/Button";
 import { CategoryTabs } from "@/components/ui/CategoryTabs/CategoryTabs";
 import { Pagination } from "@/components/ui/Pagination/Pagination";
 import { SearchField } from "@/components/ui/SearchField/SearchField";
@@ -16,9 +17,11 @@ import styles from "./PremiumServiceList.module.scss";
 interface PremiumServiceListProps {
   /** QA hook: pins the list to one state (see forcedState.ts). */
   forcedState?: ForcedState;
+  /** Experts / admins see the "Add service" button. */
+  canManage?: boolean;
 }
 
-export function PremiumServiceList({ forcedState }: PremiumServiceListProps) {
+export function PremiumServiceList({ forcedState, canManage = false }: PremiumServiceListProps) {
   const topRef = useRef<HTMLDivElement>(null);
   const [category, setCategory] = useState<CategoryFilter>("all");
   const [draft, setDraft] = useState("");
@@ -84,6 +87,13 @@ export function PremiumServiceList({ forcedState }: PremiumServiceListProps) {
         </SectionTitle>
 
         <div className={styles.controls}>
+          {canManage ? (
+            <Button href="/premium-service/new" size="md" icon="arrowRight">
+              Add service
+            </Button>
+          ) : (
+            <span />
+          )}
           <SortSelect value={sort} options={SORT_OPTIONS} onChange={changeSort} />
         </div>
 

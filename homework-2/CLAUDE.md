@@ -1,6 +1,6 @@
 # CLAUDE.md — homework-2 (Bookplate · full feature on a real API)
 
-> Bootstrapped from homework-1 on 2026-10-05. Same stack and conventions; HW2 adds a real API layer (service + hook pattern, no fetch calls inside components), create / details / edit / delete screens, validation that matches the backend, test cases, Playwright and a QA build report. Update this file as those land.
+> HW2: expert services CRUD on a real MariaDB-backed API (route handlers in this repo). Screens: `/` list, `/premium-service/new`, `/premium-service/[id]`, `/premium-service/[id]/edit`, `/login`. Roles: expert / admin manage, user browses. Docs: `docs/TEST-CASES.md`, `docs/BUILD-REPORT.md`.
 
 Next.js 16 (App Router, `src/`), React 19, TypeScript strict, **SCSS modules** (no Tailwind), ESLint 9 (`eslint-config-next`), Playwright for responsive QA.
 
@@ -12,8 +12,9 @@ Next.js 16 (App Router, `src/`), React 19, TypeScript strict, **SCSS modules** (
 | Type-check | `npm run typecheck` |
 | Lint | `npm run lint` |
 | Both | `npm run check` |
-| Responsive screenshots + overflow/tap-target assertions | `npm run qa:responsive` (needs `npx playwright install chromium` once) |
-| Login flow checks + `/login` screenshots | `npm run qa:login` |
+| Playwright, read-only project (login, widths, services) | `npm run test:e2e` (needs `npx playwright install chromium` once) |
+| Playwright, mutation project (create → edit → delete on the DB) | `npm run test:e2e:mutation` — never against a shared server |
+| Screenshot subsets | `npm run qa:responsive` · `npm run qa:login` |
 | Production build | `npm run build` |
 | Create tables (idempotent) | `npm run db:migrate` |
 | Seed demo users + 50 services | `npm run db:seed` (`npm run db:reset` wipes and reseeds) |
@@ -33,7 +34,7 @@ src/app/                      routes only (page.tsx, layout.tsx, route-level .mo
 src/components/ui/<Name>/     reusable primitives  (Button, Icon, Badge, Pagination, SortSelect, …)
 src/components/layout/<Name>/ page chrome          (Header, PageHero, Footer)
 src/components/service/<Name>/ domain components   (ServiceCard, ServiceGrid, ExpertBanner)
-src/features/<feature>/       stateful screen logic (PremiumServiceList, LoginForm)
+src/features/<feature>/       stateful screen logic (PremiumServiceList, LoginForm, ServiceForm, ServiceActions)
 src/hooks/                    data hooks (useExpertServices, useLogin) — the only place components get data from
 src/services/                 client-side API functions (fetch wrappers) used by hooks
 src/lib/validation/           zod schemas shared by API routes and forms
@@ -63,6 +64,10 @@ One component per folder: `Name.tsx` + `Name.module.scss`. Named exports, functi
 - **Database:** MariaDB/MySQL via `mysql2` pool (`src/server/db.ts`), `DATABASE_URL` in `.env.local` (see `.env.example`). Schema lives in `db/schema.sql`; change it there, keep it idempotent, re-run `npm run db:migrate`. Use `?` placeholders only — never string-concatenate values into SQL.
 - **API contract:** success returns the resource (or `PagedResult`), errors return `{ error: { message, fields? } }` with 400 / 401 / 404 / 422 / 503. Validation uses the zod schemas in `src/lib/validation` on the server (authoritative) and may reuse them in forms. Mutations require a session (401 otherwise).
 - **Auth:** `POST /api/auth/login` verifies scrypt hashes from `users` and sets an httpOnly HMAC-signed cookie (`bp_session`, 8 h); `GET /api/auth/me`, `POST /api/auth/logout`. Demo accounts are seeded from `db/seed/users.json` (dev only). Never commit real credentials or `.env.local`.
+- **Roles:** `lib/auth/roles.ts` (`canManageServices`) is the single source for both the API (401 / 403) and the UI (buttons hidden, `Forbidden` page). Pages that need a session redirect to `/login?next=<path>`; `next` must be a same-origin path.
+- **Forms:** validate with the shared zod schema first (instant feedback), then send; map 422 `error.fields` back onto the fields and show other API messages in the form-level alert while keeping the user's input. Disable submit while pending. Success = toast (`useToast`) + `router.push` + `router.refresh()`. Destructive actions go through `ConfirmDialog`.
+- **WM formats:** `lib/format.ts` — `formatPrice` (three-digit commas, no decimals), `formatDate` (`YYYY-MM-DD`), `formatDateTime` (`YYYY-MM-DD h:mm AM`). Never format inline.
+- **Tests:** read-only specs run by default; anything that writes data is `*.mutation.spec.ts` (Playwright project "mutation") and cleans up after itself.
 
 ## Don't
 

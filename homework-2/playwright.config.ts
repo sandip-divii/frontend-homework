@@ -14,7 +14,11 @@ export default defineConfig({
     baseURL: `http://localhost:${PORT}`,
     trace: "retain-on-failure",
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+  projects: [
+    // Default run: read-only specs. Mutation specs (create / edit / delete) run only on request.
+    { name: "chromium", use: { ...devices["Desktop Chrome"] }, testIgnore: ["**/*.mutation.spec.ts"] },
+    { name: "mutation", use: { ...devices["Desktop Chrome"] }, testMatch: ["**/*.mutation.spec.ts"] },
+  ],
   webServer: {
     command: "npm run dev",
     url: `http://localhost:${PORT}`,

@@ -11,9 +11,12 @@ interface TextFieldProps {
   value: string;
   onChange: (value: string) => void;
   type?: "text" | "password" | "email";
+  inputMode?: "text" | "numeric" | "decimal" | "email";
   placeholder?: string;
   /** Validation message; also sets aria-invalid and aria-describedby. */
   error?: string;
+  /** Helper text under the box (rules, formats, previews). */
+  hint?: string;
   autoComplete?: HTMLInputAutoCompleteAttribute;
   /** Control rendered inside the box on the right (e.g. show/hide password). */
   trailing?: ReactNode;
@@ -29,14 +32,18 @@ export function TextField({
   value,
   onChange,
   type = "text",
+  inputMode,
   placeholder,
   error,
+  hint,
   autoComplete,
   trailing,
   required,
   className,
 }: TextFieldProps) {
   const errorId = `${id}-error`;
+  const hintId = `${id}-hint`;
+  const describedBy = [error ? errorId : null, hint ? hintId : null].filter(Boolean).join(" ") || undefined;
 
   return (
     <div className={cn(styles.field, className)}>
@@ -48,17 +55,23 @@ export function TextField({
           id={id}
           name={name}
           type={type}
+          inputMode={inputMode}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           autoComplete={autoComplete}
           required={required}
           aria-invalid={error ? true : undefined}
-          aria-describedby={error ? errorId : undefined}
+          aria-describedby={describedBy}
           className={styles.input}
         />
         {trailing ? <div className={styles.trailing}>{trailing}</div> : null}
       </div>
+      {hint ? (
+        <p id={hintId} className={styles.hint}>
+          {hint}
+        </p>
+      ) : null}
       {error ? (
         <p id={errorId} className={styles.error} role="alert">
           {error}

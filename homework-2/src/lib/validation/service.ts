@@ -9,11 +9,21 @@ export const serviceInputSchema = z.object({
   title: z.string().trim().min(2, "Title must be at least 2 characters.").max(120, "Title must be 120 characters or fewer."),
   author: z.string().trim().min(1, "Author is required.").max(80, "Author must be 80 characters or fewer."),
   description: z.string().trim().max(2000, "Description must be 2000 characters or fewer.").nullable().optional(),
-  price: z.coerce
-    .number({ error: "Price must be a number." })
-    .int("Price must be a whole number.")
-    .min(0, "Price cannot be negative.")
-    .max(100_000_000, "Price is too large."),
+  // Accepts a number (API JSON) or a string (form input). Checked step by step so each rule has its own message
+  // and an empty field reads "required" instead of being coerced to 0.
+  price: z.unknown().transform((value, ctx) => {
+    const fail = (message: string) => {
+      ctx.addIssue({ code: "custom", message });
+      return z.NEVER;
+    };
+    if (value === undefined || value === null || (typeof value === "string" && value.trim() === "")) return fail("Price is required.");
+    const n = typeof value === "number" ? value : Number(String(value).trim());
+    if (!Number.isFinite(n)) return fail("Price must be a number.");
+    if (!Number.isInteger(n)) return fail("Price must be a whole number.");
+    if (n < 0) return fail("Price cannot be negative.");
+    if (n > 100_000_000) return fail("Price is too large.");
+    return n;
+  }),
   thumbnail: z.string().trim().max(255).optional(),
 });
 

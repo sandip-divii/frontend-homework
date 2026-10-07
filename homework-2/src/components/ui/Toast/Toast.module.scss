@@ -1,0 +1,60 @@
+@use "../../../styles/mixins" as *;
+
+.viewport {
+  position: fixed;
+  right: var(--space-5);
+  bottom: var(--space-5);
+  z-index: var(--z-toast);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: calc(100vw - var(--space-5) * 2);
+  pointer-events: none;
+
+  @include down($bp-sm) {
+    right: var(--space-4);
+    left: var(--space-4);
+    bottom: var(--space-4);
+    max-width: none;
+  }
+}
+
+.toast {
+  min-width: var(--toast-min-w);
+  padding: var(--space-4) var(--space-5);
+  border-left: var(--toast-accent-w) solid var(--color-txt-1);
+  background: var(--color-txt-1);
+  color: var(--color-white);
+  font-size: var(--text-md);
+  line-height: var(--leading-snug);
+  box-shadow: var(--shadow-menu);
+  animation: toast-in var(--dur-base) var(--ease);
+
+  @include down($bp-sm) {
+    min-width: 0;
+  }
+}
+
+.success {
+  border-left-color: var(--color-point-1);
+}
+
+.error {
+  border-left-color: var(--color-point-2);
+}
+
+.info {
+  border-left-color: var(--color-line-1);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-2));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

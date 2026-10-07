@@ -111,6 +111,12 @@
   --search-min-w: 320px;
   --sort-min-w: 100px;
   --form-max-w: 600px; // login column
+  --toast-min-w: 280px;
+  --toast-accent-w: 4px;
+  --dialog-max-w: 440px;
+  --textarea-min-h: 140px;
+  --thumb-preview-w: 160px;
+  --detail-figure-w: 520px;
   --nav-gap-max: 32px;
   --nav-offset-max: 60px;
 
@@ -125,4 +131,5 @@
 
   --z-header: 50;
   --z-menu: 60;
+  --z-toast: 100;
 }

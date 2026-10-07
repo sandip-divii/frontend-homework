@@ -1,24 +1,138 @@
 @use "../../../styles/mixins" as *;
 
-.section {
-  padding: var(--space-15) 0;
+.detail {
+  display: grid;
+  grid-template-columns: minmax(0, var(--detail-figure-w)) minmax(0, 1fr);
+  gap: var(--space-10);
+  align-items: start;
+
+  @include down($bp-md) {
+    gap: var(--space-8);
+  }
+
+  @include down($bp-sm) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-6);
+  }
 }
 
-.inner {
-  @include container;
+.figure {
+  position: relative;
+  margin: 0;
+  aspect-ratio: var(--card-thumb-ratio);
+  border: 1px solid var(--color-line-2);
+  background: var(--color-thumb);
+  overflow: hidden;
 
+  img {
+    object-fit: cover;
+  }
+}
+
+.badge {
+  position: absolute;
+  top: var(--space-5);
+  left: var(--space-5);
+  z-index: 1;
+}
+
+.info {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-6);
+  gap: var(--space-5);
+  min-width: 0;
+}
+
+.author {
+  font-size: var(--text-base);
+  color: var(--color-txt-3);
+}
+
+.price {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.price-value {
+  font-family: var(--font-serif);
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-none);
+  color: var(--color-txt-1);
+
+  @include down($bp-sm) {
+    font-size: var(--text-2xl);
+  }
+}
+
+.price-unit {
+  font-size: var(--text-md);
+  color: var(--color-txt-3);
 }
 
 .meta {
-  font-size: var(--text-lg);
+  display: flex;
+  gap: var(--space-4);
+  font-size: var(--text-md);
   color: var(--color-txt-2);
 }
 
-.note {
+.meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.heart {
+  color: var(--color-point-2);
+}
+
+.star {
+  color: var(--color-point-1);
+}
+
+.description {
+  font-size: var(--text-base);
+  line-height: var(--leading-body);
+  color: var(--color-txt-2);
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.description-empty {
   font-size: var(--text-md);
   color: var(--color-txt-3);
+}
+
+.dates {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--color-line-2);
+  font-size: var(--text-md);
+
+  dt {
+    color: var(--color-txt-3);
+  }
+
+  dd {
+    margin: var(--space-1) 0 0;
+    color: var(--color-txt-1);
+  }
+
+  @include down($bp-xxs) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--color-line-2);
 }

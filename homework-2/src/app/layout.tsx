@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Nanum_Myeongjo } from "next/font/google";
+import { ToastProvider } from "@/components/ui/Toast/ToastProvider";
 import "@/styles/globals.scss";
 
 const nanumMyeongjo = Nanum_Myeongjo({
@@ -34,7 +35,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <a href="#main" className="skip-link">
           Skip to content
         </a>
-        {children}
+        <ToastProvider>{children}</ToastProvider>
       </body>
     </html>
   );

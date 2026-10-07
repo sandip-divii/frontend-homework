@@ -1,6 +1,56 @@
 # Homework 2 — A full feature with a real API (Bookplate)
 
-> **Status (2026-10-05):** connected to a real MariaDB database (`homework2`) with a Next.js route-handler API for services (list / create / detail / update / delete) and auth (login / logout / me). The list and login screens now use the API through the service + hook pattern. Still to do for HW2: create / edit / delete screens, test cases, QA build report.
+Expert services for the Bookplate publishing platform: **list → create → details → edit → delete** on a real
+MariaDB-backed API built in this repo (Next.js route handlers), with roles, WM formats, loading / empty / error
+states, test cases, Playwright (read-only + separate mutation suite) and a QA build report.
+
+| | |
+| --- | --- |
+| **Demo** | Live demo on the review call — the API needs the local MariaDB (`homework2`). Runs in two commands, see "Run it". |
+| **Repo** | https://github.com/sandip-divii/frontend-homework (public) — this homework lives in [`homework-2/`](https://github.com/sandip-divii/frontend-homework/tree/main/homework-2) |
+| **Design** | Figma [list frame](https://www.figma.com/design/7yxIdnZegxBVEiqyV3oQmA/XP-%7C-Bookplate-design?node-id=1600-38779) · [login frame](https://www.figma.com/design/7yxIdnZegxBVEiqyV3oQmA/XP-%7C-Bookplate-design?node-id=3429-36106); create / detail / edit screens reuse the same primitives (no Figma frame exists for them) |
+| **Docs** | [Test cases (WM QA format)](docs/TEST-CASES.md) · [QA build report](docs/BUILD-REPORT.md) · [Design check](docs/DESIGN-CHECK.md) · [Plan](docs/PLAN.md) |
+
+## Screens
+
+| Route | Who | What |
+| --- | --- | --- |
+| `/` | everyone | List: category tabs, search, sort, 12 per page, pagination; experts/admins also see **Add service** |
+| `/premium-service/new` | expert, admin | Create form (signed-out → `/login?next=…`, plain user → 403 page) |
+| `/premium-service/:id` | everyone | Details: thumbnail, badge, author, price `15,000` KRW, likes, rating, description, Created / Updated (`YYYY-MM-DD h:mm AM`); **Edit / Delete** for managers |
+| `/premium-service/:id/edit` | expert, admin | Edit form, pre-filled |
+| `/login` | everyone | ID / PW login (Figma), Save ID, show/hide password, returns to `?next=` |
+
+**Roles:** `bookplate` (expert) can manage services; `reviewer` (user) can only browse. The API enforces it (401 / 403) and the UI hides the buttons.
+
+**WM formats:** numbers use the three-digit comma rule with no decimals for KRW (`12,345`); dates use the English WM format `YYYY-MM-DD` with AM/PM after the time; error messages are field-level, one sentence, identical on the form and in the API (`lib/validation`). The WM Error Message List page is still empty ("working on it"), so our list is documented in `docs/TEST-CASES.md`.
+
+## Run it
+
+```bash
+# 1. database (XAMPP MariaDB on 127.0.0.1:3307, database "homework2" must exist)
+cp .env.example .env.local        # DATABASE_URL + a random SESSION_SECRET
+npm install
+npm run db:migrate                # creates users + expert_services (idempotent)
+npm run db:seed                   # 2 demo users + 50 services  (npm run db:reset wipes and reseeds)
+
+# 2. app
+npm run dev                       # http://localhost:3001   (homework-1 keeps 3000)
+curl http://localhost:3001/api/health   # {"ok":true,"database":"up"}
+```
+
+Demo accounts (local seed only): see [`db/seed/users.json`](db/seed/users.json) — `bookplate` / `Bookplate2026!` (expert), `reviewer` / `Review2026!` (user).
+
+| Script | Purpose |
+| --- | --- |
+| `npm run check` | `tsc --noEmit` + ESLint |
+| `npm run build` | production build |
+| `npm run test:e2e` | Playwright, read-only project: login, list widths, form widths, services (page opens, list, states, roles, validation) |
+| `npm run test:e2e:mutation` | Playwright **mutation** project: create → list → edit → delete on the real API (writes to the DB; never run against a shared server) |
+| `npm run test:e2e:all` | both projects |
+| `npm run qa:responsive` / `npm run qa:login` | screenshot subsets |
+
+## Starting point (copied from Homework 1)
 
 ## Database & API
 
