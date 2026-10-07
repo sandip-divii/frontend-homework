@@ -6,7 +6,7 @@ states, test cases, Playwright (read-only + separate mutation suite) and a QA bu
 
 | | |
 | --- | --- |
-| **Demo** | Live demo on the review call — the API needs the local MariaDB (`homework2`). Runs in two commands, see "Run it". |
+| **Demo** | https://frontend-homework-2-red.vercel.app — Vercel (functions in Tokyo) + the same API on a free **TiDB Cloud Starter** MySQL-compatible database in Tokyo. Log in as `bookplate` / `Bookplate2026!` to add, edit and delete. Local run: see "Run it". |
 | **Repo** | https://github.com/sandip-divii/frontend-homework (public) — this homework lives in [`homework-2/`](https://github.com/sandip-divii/frontend-homework/tree/main/homework-2) |
 | **Design** | Figma [list frame](https://www.figma.com/design/7yxIdnZegxBVEiqyV3oQmA/XP-%7C-Bookplate-design?node-id=1600-38779) · [login frame](https://www.figma.com/design/7yxIdnZegxBVEiqyV3oQmA/XP-%7C-Bookplate-design?node-id=3429-36106); create / detail / edit screens reuse the same primitives (no Figma frame exists for them) |
 | **Docs** | [Test cases (WM QA format)](docs/TEST-CASES.md) · [QA build report](docs/BUILD-REPORT.md) · [Design check](docs/DESIGN-CHECK.md) · [Plan](docs/PLAN.md) |
@@ -28,7 +28,8 @@ states, test cases, Playwright (read-only + separate mutation suite) and a QA bu
 ## Run it
 
 ```bash
-# 1. database (XAMPP MariaDB on 127.0.0.1:3307, database "homework2" must exist)
+# 1. database — local XAMPP MariaDB on 127.0.0.1:3307 (migrate creates the "homework2" database if missing)
+#    hosted alternative: any MySQL-compatible URL + DATABASE_SSL=true (the demo uses TiDB Cloud Starter)
 cp .env.example .env.local        # DATABASE_URL + a random SESSION_SECRET
 npm install
 npm run db:migrate                # creates users + expert_services (idempotent)

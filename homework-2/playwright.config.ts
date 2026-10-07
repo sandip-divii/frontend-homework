@@ -1,6 +1,9 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const PORT = 3001;
+// PLAYWRIGHT_BASE_URL=https://… runs the suites against a deployed app instead of starting the dev server.
+const BASE_URL = process.env.PLAYWRIGHT_BASE_URL ?? `http://localhost:${PORT}`;
+const IS_LOCAL = BASE_URL.includes("localhost");
 
 export default defineConfig({
   testDir: "./tests",
@@ -11,7 +14,7 @@ export default defineConfig({
   retries: 0,
   reporter: [["list"]],
   use: {
-    baseURL: `http://localhost:${PORT}`,
+    baseURL: BASE_URL,
     trace: "retain-on-failure",
   },
   projects: [
@@ -19,10 +22,12 @@ export default defineConfig({
     { name: "chromium", use: { ...devices["Desktop Chrome"] }, testIgnore: ["**/*.mutation.spec.ts"] },
     { name: "mutation", use: { ...devices["Desktop Chrome"] }, testMatch: ["**/*.mutation.spec.ts"] },
   ],
-  webServer: {
-    command: "npm run dev",
-    url: `http://localhost:${PORT}`,
-    reuseExistingServer: true,
-    timeout: 180_000,
-  },
+  webServer: IS_LOCAL
+    ? {
+        command: "npm run dev",
+        url: `http://localhost:${PORT}`,
+        reuseExistingServer: true,
+        timeout: 180_000,
+      }
+    : undefined,
 });

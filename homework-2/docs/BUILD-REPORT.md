@@ -12,7 +12,7 @@ Written as a hand-over to QA: everything needed to test is on this page or linke
 | Folder | `homework-2/` |
 | Commit | `04d331e` — Homework 2: create / edit / delete screens, roles, WM formats, tests, docs |
 | Date | 2026-10-07 |
-| Run | locally (see part 6); no hosted demo because the API needs the local MariaDB |
+| Demo | https://frontend-homework-2-red.vercel.app — Vercel (Tokyo functions) + TiDB Cloud Starter (free, MySQL-compatible, Tokyo). Same code and seed as local; `DATABASE_SSL=true` enables TLS. |
 
 ## 2. TL tasks covered
 
@@ -56,6 +56,7 @@ Local seed only (`db/seed/users.json`, loaded by `npm run db:seed`). Passwords a
 2. In `homework-2/`: copy `.env.example` to `.env.local` (set `DATABASE_URL`, any long random `SESSION_SECRET`).
 3. `npm install` → `npm run db:migrate` → `npm run db:seed` (2 users, 50 services: 36 cover, 8 internal, 6 correction, 0 typo — the empty category is intentional).
 4. `npm run dev` → http://localhost:3001 ; `GET /api/health` must answer `{"ok":true,"database":"up"}`.
+   Or skip all of this and use the hosted demo: https://frontend-homework-2-red.vercel.app (same seed, same accounts).
 5. To start over at any time: `npm run db:reset`.
 
 ## 7. What to test, numbered
@@ -75,7 +76,7 @@ Full cases with IDs, preconditions, steps and expected results: [`docs/TEST-CASE
 
 ## 8. Known issues and what is not covered
 
-- **No hosted demo.** The API needs the local MariaDB; demo is live on the review call or by following part 6. A hosted MySQL (Aiven / TiDB free tier) plus Vercel would take ~30 min once an account exists.
+- **Hosted demo runs on a free TiDB Cloud Starter instance** that scales to zero: the first request after idle can take 1–3 s. The demo database is shared by everyone who opens the link; `npm run db:reset` against it restores the seed.
 - **No "my page", cart or notifications** — header icons for those are placeholders from the Figma frame.
 - **Likes, rating and review count** are seed data only; there is no UI to like or review.
 - **Thumbnail** is a choice of three placeholder covers (no file upload yet).
@@ -125,6 +126,21 @@ ok 1 [mutation] › tests\services.mutation.spec.ts:29:7 › create → list →
 ok 2 [mutation] › tests\services.mutation.spec.ts:52:7 › create → list → edit → delete › edit pre-fills the 
 ok 3 [mutation] › tests\services.mutation.spec.ts:66:7 › create → list → edit → delete › delete asks for con
 3 passed (7.5s)
+```
+
+**Same suites against the hosted demo** (`PLAYWRIGHT_BASE_URL=https://frontend-homework-2-red.vercel.app`, 2026-10-07):
+
+```text
+$ PLAYWRIGHT_BASE_URL=https://frontend-homework-2-red.vercel.app npm run test:e2e
+Running 66 tests using 1 worker
+66 passed (1.9m)
+
+$ PLAYWRIGHT_BASE_URL=https://frontend-homework-2-red.vercel.app npm run test:e2e:mutation
+Running 3 tests using 1 worker
+ok 1 [mutation] › tests\services.mutation.spec.ts:29:7 › create → list → edit → delete › create through the 
+ok 2 [mutation] › tests\services.mutation.spec.ts:52:7 › create → list → edit → delete › edit pre-fills the 
+ok 3 [mutation] › tests\services.mutation.spec.ts:66:7 › create → list → edit → delete › delete asks for con
+3 passed (11.1s)
 ```
 
 ## 10. Screen sizes and browsers checked

@@ -16,6 +16,8 @@ Next.js 16 (App Router, `src/`), React 19, TypeScript strict, **SCSS modules** (
 | Playwright, mutation project (create → edit → delete on the DB) | `npm run test:e2e:mutation` — never against a shared server |
 | Screenshot subsets | `npm run qa:responsive` · `npm run qa:login` |
 | Production build | `npm run build` |
+| Deploy (Vercel project `frontend-homework-2`, prod env vars already set) | `npx vercel deploy --prod` |
+| Hosted DB migrate / seed | `node --env-file=.env.tidb db/migrate.mjs` · `node --env-file=.env.tidb db/seed.mjs --reset` |
 | Create tables (idempotent) | `npm run db:migrate` |
 | Seed demo users + 50 services | `npm run db:seed` (`npm run db:reset` wipes and reseeds) |
 
@@ -61,7 +63,7 @@ One component per folder: `Name.tsx` + `Name.module.scss`. Named exports, functi
 - Server Components by default; add `"use client"` only where state/effects/events are required (currently HeaderView, PremiumServiceList, SearchField, SortSelect, CategoryTabs, LoginForm, hooks). `Header` is a thin async Server Component that reads the session and renders `HeaderView`.
 - Accessibility is non-negotiable: semantic elements, labels on icon buttons, `aria-current`, keyboard support for custom widgets, visible focus, ≥24px targets (asserted by the Playwright suite).
 - **Data flow (service + hook pattern):** component → hook (`src/hooks`) → service (`src/services`, `apiFetch`) → route handler (`src/app/api`) → repository (`src/server/repositories`) → MySQL. Components never call `fetch` or the database directly. Server Components may call repositories directly (they are the backend).
-- **Database:** MariaDB/MySQL via `mysql2` pool (`src/server/db.ts`), `DATABASE_URL` in `.env.local` (see `.env.example`). Schema lives in `db/schema.sql`; change it there, keep it idempotent, re-run `npm run db:migrate`. Use `?` placeholders only — never string-concatenate values into SQL.
+- **Database:** MariaDB/MySQL via `mysql2` pool (`src/server/db.ts`), `DATABASE_URL` in `.env.local` (see `.env.example`); `DATABASE_SSL=true` for hosted MySQL (the Vercel demo uses TiDB Cloud Starter; its URL lives only in Vercel env vars and the git-ignored `.env.tidb`). Schema lives in `db/schema.sql`; change it there, keep it idempotent, re-run `npm run db:migrate`. Use `?` placeholders only — never string-concatenate values into SQL.
 - **API contract:** success returns the resource (or `PagedResult`), errors return `{ error: { message, fields? } }` with 400 / 401 / 404 / 422 / 503. Validation uses the zod schemas in `src/lib/validation` on the server (authoritative) and may reuse them in forms. Mutations require a session (401 otherwise).
 - **Auth:** `POST /api/auth/login` verifies scrypt hashes from `users` and sets an httpOnly HMAC-signed cookie (`bp_session`, 8 h); `GET /api/auth/me`, `POST /api/auth/logout`. Demo accounts are seeded from `db/seed/users.json` (dev only). Never commit real credentials or `.env.local`.
 - **Roles:** `lib/auth/roles.ts` (`canManageServices`) is the single source for both the API (401 / 403) and the UI (buttons hidden, `Forbidden` page). Pages that need a session redirect to `/login?next=<path>`; `next` must be a same-origin path.

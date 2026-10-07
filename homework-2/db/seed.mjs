@@ -1,15 +1,10 @@
 // Seeds demo users and expert services. Usage: npm run db:seed   |   npm run db:reset (wipes first)
 // Demo passwords live in db/seed/users.json (local dev only) and are stored scrypt-hashed.
-import { existsSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { randomBytes, scryptSync } from "node:crypto";
-import mysql from "mysql2/promise";
+import { connectToDatabase, loadEnv } from "./connection.mjs";
 
-if (existsSync(".env.local")) process.loadEnvFile(".env.local");
-const url = process.env.DATABASE_URL;
-if (!url) {
-  console.error("DATABASE_URL is not set. Copy .env.example to .env.local and fill it in.");
-  process.exit(1);
-}
+const url = loadEnv();
 const reset = process.argv.includes("--reset");
 
 // Same format as src/server/auth/password.ts
@@ -56,7 +51,7 @@ function buildServices() {
 }
 
 const users = JSON.parse(readFileSync(new URL("./seed/users.json", import.meta.url), "utf8"));
-const conn = await mysql.createConnection({ uri: url });
+const conn = await connectToDatabase(url);
 try {
   if (reset) {
     await conn.query("DELETE FROM expert_services");

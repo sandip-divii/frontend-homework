@@ -1,13 +1,20 @@
-import mysql, { type Pool, type ResultSetHeader, type RowDataPacket } from "mysql2/promise";
+import mysql, { type Pool, type PoolOptions, type ResultSetHeader, type RowDataPacket } from "mysql2/promise";
 import { env } from "./env";
 
 // One pool per process; cached on globalThis so Next's dev HMR does not leak connections.
 const globalForDb = globalThis as unknown as { __homework2Pool?: Pool };
 
+/** TLS for hosted MySQL (TiDB Cloud, Aiven…). Enable with DATABASE_SSL=true; local XAMPP stays plain. */
+function sslOptions(): PoolOptions["ssl"] {
+  if (process.env.DATABASE_SSL !== "true") return undefined;
+  return { minVersion: "TLSv1.2", rejectUnauthorized: true };
+}
+
 export function getPool(): Pool {
   if (!globalForDb.__homework2Pool) {
     globalForDb.__homework2Pool = mysql.createPool({
       uri: env.databaseUrl,
+      ssl: sslOptions(),
       waitForConnections: true,
       connectionLimit: 10,
       timezone: "Z",
