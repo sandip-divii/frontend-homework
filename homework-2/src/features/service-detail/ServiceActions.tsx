@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/Button/Button";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog/ConfirmDialog";
 import { useToast } from "@/components/ui/Toast/ToastProvider";
-import { useServiceMutations } from "@/hooks/useServiceMutations";
+import { useDeleteService } from "@/hooks/API/services/useServiceMutations";
 import { ApiError } from "@/services/http";
 import type { ExpertService } from "@/types/service";
 import styles from "./ServiceActions.module.scss";
@@ -14,20 +14,19 @@ interface ServiceActionsProps {
   service: ExpertService;
 }
 
-/** Edit / Delete for managers. Delete asks for confirmation, then returns to the list. */
+/** Edit / Delete for managers. Delete asks for confirmation, then returns to the (invalidated) list. */
 export function ServiceActions({ service }: ServiceActionsProps) {
   const router = useRouter();
   const toast = useToast();
-  const { remove, pending } = useServiceMutations();
+  const deleteMutation = useDeleteService();
   const [confirming, setConfirming] = useState(false);
 
   const onDelete = async () => {
     try {
-      await remove(service.id);
+      await deleteMutation.mutateAsync(service.id);
       setConfirming(false);
       toast.push(`"${service.title}" was deleted.`);
       router.push("/");
-      router.refresh();
     } catch (err) {
       setConfirming(false);
       toast.push(err instanceof ApiError ? err.message : "Could not delete the service. Please try again.", "error");
@@ -47,7 +46,7 @@ export function ServiceActions({ service }: ServiceActionsProps) {
         title="Delete this service?"
         description={`"${service.title}" by ${service.author} will be removed permanently.`}
         confirmLabel="Delete"
-        pending={pending}
+        pending={deleteMutation.isPending}
         pendingLabel="Deleting…"
         onConfirm={onDelete}
         onCancel={() => setConfirming(false)}

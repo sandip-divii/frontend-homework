@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Nanum_Myeongjo } from "next/font/google";
+import type { ReactNode } from "react";
 import { ToastProvider } from "@/components/ui/Toast/ToastProvider";
+import { QueryProvider } from "@/providers/QueryProvider";
 import "@/styles/globals.scss";
 
 const nanumMyeongjo = Nanum_Myeongjo({
@@ -25,7 +27,12 @@ export const viewport: Viewport = {
 const PRETENDARD_CSS =
   "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css";
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+interface RootLayoutProps {
+  children: ReactNode;
+}
+
+// Typed by hand (not the generated `LayoutProps`) so `tsc --noEmit` passes on a fresh clone before any build.
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" className={nanumMyeongjo.variable}>
       <head>
@@ -35,7 +42,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <a href="#main" className="skip-link">
           Skip to content
         </a>
-        <ToastProvider>{children}</ToastProvider>
+        <QueryProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </QueryProvider>
       </body>
     </html>
   );

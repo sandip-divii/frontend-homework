@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/Button/Button";
 import { Checkbox } from "@/components/ui/Checkbox/Checkbox";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { TextField } from "@/components/ui/TextField/TextField";
-import { useLogin } from "@/hooks/useLogin";
-import { LOGIN_MESSAGES } from "@/lib/validation/auth";
+import { useLogin, type LoginField } from "@/hooks/API/auth/useLogin";
+import { loginSchema } from "@/lib/validation/auth";
 import styles from "./LoginForm.module.scss";
 
 interface LoginFormProps {
@@ -22,18 +22,22 @@ export function LoginForm({ defaultId = "", redirectTo = "/" }: LoginFormProps) 
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [saveId, setSaveId] = useState(defaultId !== "");
-  const [localError, setLocalError] = useState<{ field: "id" | "password"; message: string } | null>(null);
+  const [localError, setLocalError] = useState<{ field: LoginField; message: string } | null>(null);
 
   const shown = localError ?? error;
-  const fieldError = (field: "id" | "password") => (shown?.field === field ? shown.message : undefined);
+  const fieldError = (field: LoginField) => (shown?.field === field ? shown.message : undefined);
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Same rules as the API (lib/validation/auth.ts) for instant feedback; the API stays authoritative.
-    if (!id.trim()) return setLocalError({ field: "id", message: LOGIN_MESSAGES.idRequired });
-    if (!password) return setLocalError({ field: "password", message: LOGIN_MESSAGES.passwordRequired });
+    // The API's own schema runs here first for instant feedback; the API stays authoritative.
+    const parsed = loginSchema.safeParse({ id, password, saveId });
+    if (!parsed.success) {
+      const issue = parsed.error.issues[0];
+      setLocalError({ field: issue.path[0] === "password" ? "password" : "id", message: issue.message });
+      return;
+    }
     setLocalError(null);
-    void submit({ id: id.trim(), password, saveId });
+    void submit(parsed.data);
   };
 
   return (

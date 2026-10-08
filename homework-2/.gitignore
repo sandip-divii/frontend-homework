@@ -49,3 +49,6 @@ next-env.d.ts
 
 .vercel
 .env*
+
+# the HTML report that is served on the demo (root .gitignore hides playwright-report/ everywhere else)
+!/public/playwright-report/

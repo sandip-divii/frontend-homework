@@ -127,10 +127,34 @@
   color: var(--color-point-1);
 }
 
+// Skeleton bars: same rows as the card, sizes from the --skel-* tokens.
+.skel-thumb {
+  height: 100%;
+}
+
+.skel-author {
+  width: var(--skel-author-w);
+  height: var(--text-sm);
+}
+
 .skel-title {
+  width: var(--skel-title-w);
+  height: var(--text-lg);
   margin-top: var(--space-6);
 }
 
 .skel-price {
+  width: var(--skel-price-w);
+  height: var(--text-sm);
   margin-top: var(--space-6);
+}
+
+.skel-likes {
+  width: var(--skel-likes-w);
+  height: var(--skel-meta-h);
+}
+
+.skel-rating {
+  width: var(--skel-rating-w);
+  height: var(--skel-meta-h);
 }

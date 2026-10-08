@@ -57,20 +57,20 @@ export function ServiceCard({ service, priority = false }: ServiceCardProps) {
   );
 }
 
-/** Same geometry as ServiceCard so the layout does not jump when data arrives. */
+/** Same geometry as ServiceCard so the layout does not jump when data arrives (sizes are tokens in the stylesheet). */
 export function ServiceCardSkeleton() {
   return (
     <div className={styles.card} aria-hidden="true">
       <div className={styles.thumb}>
-        <Skeleton height="100%" />
+        <Skeleton className={styles["skel-thumb"]} />
       </div>
       <div className={styles.body}>
-        <Skeleton width="80px" height="13px" />
-        <Skeleton width="60%" height="18px" className={styles["skel-title"]} />
-        <Skeleton width="56px" height="13px" className={styles["skel-price"]} />
+        <Skeleton className={styles["skel-author"]} />
+        <Skeleton className={styles["skel-title"]} />
+        <Skeleton className={styles["skel-price"]} />
         <div className={styles.meta}>
-          <Skeleton width="40px" height="20px" />
-          <Skeleton width="72px" height="20px" />
+          <Skeleton className={styles["skel-likes"]} />
+          <Skeleton className={styles["skel-rating"]} />
         </div>
       </div>
     </div>

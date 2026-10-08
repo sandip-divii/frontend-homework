@@ -10,7 +10,7 @@ import { TextAreaField } from "@/components/ui/TextAreaField/TextAreaField";
 import { TextField } from "@/components/ui/TextField/TextField";
 import { useToast } from "@/components/ui/Toast/ToastProvider";
 import { CATEGORY_LABEL } from "@/data/categories";
-import { useServiceMutations } from "@/hooks/useServiceMutations";
+import { useCreateService, useUpdateService } from "@/hooks/API/services/useServiceMutations";
 import { formatPrice } from "@/lib/format";
 import { SERVICE_CATEGORIES, serviceInputSchema } from "@/lib/validation/service";
 import { ApiError } from "@/services/http";
@@ -51,12 +51,15 @@ function firstMessages(fields: Record<string, string[] | undefined>): FieldError
 /**
  * Create / edit form for an expert service.
  * Client validation uses the same zod schema as the API, so both sides agree; the API stays authoritative
- * and its 422 field errors are mapped back onto the fields. On success: toast → back to the list.
+ * and its 422 field errors are mapped back onto the fields. On success the mutation hook has already
+ * invalidated the list / details cache, so: toast → list (create) or the detail page (edit).
  */
 export function ServiceForm({ mode, initial }: ServiceFormProps) {
   const router = useRouter();
   const toast = useToast();
-  const { create, update, pending } = useServiceMutations();
+  const createMutation = useCreateService();
+  const updateMutation = useUpdateService();
+  const pending = createMutation.isPending || updateMutation.isPending;
 
   const [category, setCategory] = useState<ServiceCategory>(initial?.category ?? "cover");
   const [title, setTitle] = useState(initial?.title ?? "");
@@ -90,14 +93,14 @@ export function ServiceForm({ mode, initial }: ServiceFormProps) {
 
     try {
       if (mode === "create") {
-        await create(parsed.data);
+        await createMutation.mutateAsync(parsed.data);
         toast.push(FORM_MESSAGES.created);
+        router.push("/");
       } else if (initial) {
-        await update(initial.id, parsed.data);
+        await updateMutation.mutateAsync({ id: initial.id, input: parsed.data });
         toast.push(FORM_MESSAGES.updated);
+        router.push(`/premium-service/${initial.id}`);
       }
-      router.push("/");
-      router.refresh(); // the list re-fetches on mount, so the new row shows without a manual reload
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.fields) setFieldErrors(firstMessages(err.fields));

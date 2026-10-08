@@ -9,9 +9,10 @@ export const LOGIN_MESSAGES = {
   network: "Could not reach the server. Please try again.",
 } as const;
 
+// Shared by POST /api/auth/login (authoritative) and LoginForm (instant feedback).
 export const loginSchema = z.object({
-  id: z.string().trim().min(1, LOGIN_MESSAGES.idRequired).max(50),
-  password: z.string().min(1, LOGIN_MESSAGES.passwordRequired).max(200),
+  id: z.string({ error: LOGIN_MESSAGES.idRequired }).trim().min(1, LOGIN_MESSAGES.idRequired).max(50, "ID must be 50 characters or fewer."),
+  password: z.string({ error: LOGIN_MESSAGES.passwordRequired }).min(1, LOGIN_MESSAGES.passwordRequired).max(200, "Password is too long."),
   saveId: z.boolean().optional().default(false),
 });
 

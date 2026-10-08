@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start -p 3001",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "check": "npm run typecheck && npm run lint",
     "qa:responsive": "playwright test --project=chromium tests/responsive.spec.ts tests/responsive-forms.spec.ts",
     "qa:login": "playwright test --project=chromium tests/login.spec.ts",
@@ -19,6 +19,7 @@
     "test:e2e:all": "playwright test"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.104.1",
     "mysql2": "^3.24.5",
     "next": "16.3.8",
     "react": "19.2.8",

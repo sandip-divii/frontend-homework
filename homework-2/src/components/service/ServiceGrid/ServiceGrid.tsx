@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/Button/Button";
 import { EmptyState } from "@/components/ui/EmptyState/EmptyState";
 import { ServiceCard, ServiceCardSkeleton } from "@/components/service/ServiceCard/ServiceCard";
-import type { ListStatus } from "@/hooks/useExpertServices";
+import type { ListStatus } from "@/hooks/API/services/useServicesQuery";
 import type { ExpertService } from "@/types/service";
 import { cn } from "@/lib/cn";
 import styles from "./ServiceGrid.module.scss";

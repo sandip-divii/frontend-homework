@@ -69,6 +69,18 @@ test.describe("list behaviour", () => {
     expect(prices[0]).toBeGreaterThanOrEqual(prices[prices.length - 1]);
   });
 
+  test("filters live in the URL and survive a reload", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: "Cover design" }).click();
+    await expect(page.locator("[data-list-status='success']")).toBeVisible();
+    await page.getByRole("button", { name: "Page 2" }).click();
+    await expect(page).toHaveURL(/\?category=cover&page=2$/);
+    await page.reload();
+    await expect(page.getByRole("button", { name: "Cover design" })).toHaveAttribute("aria-pressed", "true");
+    await expect(page.getByRole("button", { name: "Page 2" })).toHaveAttribute("aria-current", "page");
+    await expect(page.getByRole("heading", { name: "Cover design", level: 2 })).toBeVisible();
+  });
+
   test("pagination moves to the next page", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("[data-list-status='success']")).toBeVisible();
@@ -166,5 +178,12 @@ test.describe("validation (create form, expert)", () => {
     expect(body.error.fields.title[0]).toBe("Title must be at least 2 characters.");
     expect(body.error.fields.author[0]).toBe("Author is required.");
     expect(body.error.fields.price[0]).toBe("Price cannot be negative.");
+  });
+
+  test("a missing field on PUT gets a WM message, not zod's raw text", async ({ page }) => {
+    const res = await page.request.put("/api/services/1", { data: { category: "cover", title: "Cover design", price: 15000 } });
+    expect(res.status()).toBe(422);
+    const body = await res.json();
+    expect(body.error.fields.author).toEqual(["Author is required."]);
   });
 });

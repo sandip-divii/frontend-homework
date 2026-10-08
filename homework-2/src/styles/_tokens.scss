@@ -99,6 +99,13 @@
   --card-body-min-h-lg: 240px;
   --card-body-min-h-md: 200px;
   --card-body-pad-top: 36px;
+  // skeleton bars (derived: match the card rows so nothing jumps when data arrives)
+  --skel-author-w: 80px;
+  --skel-title-w: 60%;
+  --skel-price-w: 56px;
+  --skel-likes-w: 40px;
+  --skel-rating-w: 72px;
+  --skel-meta-h: 20px; // icon row height
   --empty-min-h: 420px;
   --empty-min-h-sm: 320px;
   --empty-text-max-w: 420px;
