@@ -4,7 +4,7 @@ import { expect, test } from "@playwright/test";
 import { EXPERT, expectNoSidewaysScroll, loginAs } from "./helpers";
 
 /** Responsive check for the HW2 screens (create, detail, edit) at the WM minimum widths. */
-const WIDTHS = [1920, 1366, 768, 375] as const;
+const WIDTHS = [1920, 1440, 1366, 768, 375] as const;
 const OUT_DIR = path.resolve("screenshots", "forms");
 
 const SCREENS = [

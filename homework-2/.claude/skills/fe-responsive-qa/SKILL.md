@@ -1,6 +1,6 @@
 ---
 name: fe-responsive-qa
-description: Run the Step-5 responsive QA for this project — screenshots at 1920/1600/1366/1280/1024/991/768/640/480/375 for the filled, loading and empty list states, with sideways-scroll and tap-target assertions. Use when asked to "check responsive", "take screenshots at all widths", "run responsive QA", or before handing a screen to the designer.
+description: Run the Step-5 responsive QA for this project — screenshots at 1920/1600/1440/1366/1280/1024/991/768/640/480/375 for the filled, loading and empty list states, with sideways-scroll and tap-target assertions. Use when asked to "check responsive", "take screenshots at all widths", "run responsive QA", or before handing a screen to the designer.
 ---
 
 # fe-responsive-qa

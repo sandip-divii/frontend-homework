@@ -78,7 +78,7 @@ Areas are the Step 7 table: page opens · main flow · validation · list · rol
 
 | ID | Precondition | Steps | Expected result | Automation |
 | --- | --- | --- | --- | --- |
-| SS-01 | Seed | `/` at 1920, 1600, 1366, 1280, 1024, 991, 768, 640, 480, 375 × filled / loading / empty | No sideways scroll; no control under 24 px; 12 cards; screenshots in `screenshots/` | responsive.spec (30) |
-| SS-02 | Expert | `/premium-service/new`, `/premium-service/1`, `/premium-service/1/edit` at 1920, 1366, 768, 375 | No sideways scroll; screenshots in `screenshots/forms/` | responsive-forms.spec (12) |
-| SS-03 | — | `/login` at 1920, 1366, 768, 375 (default + error) | No sideways scroll; screenshots in `screenshots/login/` | login.spec (4) |
+| SS-01 | Seed | `/` at 1920, 1600, 1440, 1366, 1280, 1024, 991, 768, 640, 480, 375 × filled / loading / empty | No sideways scroll; no control under 24 px; 12 cards; screenshots in `screenshots/` | responsive.spec (33) |
+| SS-02 | Expert | `/premium-service/new`, `/premium-service/1`, `/premium-service/1/edit` at 1920, 1440, 1366, 768, 375 | No sideways scroll; screenshots in `screenshots/forms/` | responsive-forms.spec (15) |
+| SS-03 | — | `/login` at 1920, 1440, 1366, 768, 375 (default + error) | No sideways scroll; screenshots in `screenshots/login/` | login.spec (5) |
 | SS-04 | — | 375: open the header menu | Nav items stack full width; Esc closes | manual |

@@ -61,7 +61,7 @@ Local seed only (`db/seed/users.json`, loaded by `npm run db:seed`). Passwords a
 
 ## 7. What to test, numbered
 
-Full cases with IDs, preconditions, steps and expected results: [`docs/TEST-CASES.md`](TEST-CASES.md). Short list:
+Full cases with IDs, preconditions, steps and expected results: [`docs/TEST-CASES.md`](TEST-CASES.md). QA hand-over sheet: [`docs/QA-HANDOVER.md`](QA-HANDOVER.md). Short list:
 
 1. Open `/` — title, 12 cards, pagination 1–5.
 2. Search "Minji", tab **Typo inspection** (empty state), search gibberish (no-results state), sort **Price: high to low**, page 2.
@@ -147,7 +147,8 @@ ok 3 [mutation] › tests\services.mutation.spec.ts:66:7 › create → list →
 
 | What | Widths | How |
 | --- | --- | --- |
-| List (filled / loading / empty) | 1920 · 1600 · 1366 · 1280 · 1024 · 991 · 768 · 640 · 480 · 375 | `tests/responsive.spec.ts` (30 tests, screenshots in `screenshots/`) |
-| Create · Detail · Edit | 1920 · 1366 · 768 · 375 | `tests/responsive-forms.spec.ts` (12 tests, `screenshots/forms/`) |
-| Login (default / error) | 1920 · 1366 · 768 · 375 | `tests/login.spec.ts` (`screenshots/login/`) |
+| List (filled / loading / empty) | 1920 · 1600 · 1440 · 1366 · 1280 · 1024 · 991 · 768 · 640 · 480 · 375 | `tests/responsive.spec.ts` (33 tests, screenshots in `screenshots/`) |
+| Create · Detail · Edit | 1920 · 1440 · 1366 · 768 · 375 | `tests/responsive-forms.spec.ts` (15 tests, `screenshots/forms/`) |
+| Login (default / error) | 1920 · 1440 · 1366 · 768 · 375 | `tests/login.spec.ts` (`screenshots/login/`) |
+| HTML report (deployed demo, 2026-10-08) | 76 / 76 | https://frontend-homework-2-red.vercel.app/playwright-report/ |
 | Browsers | Chromium 1.x (Playwright) · Chrome 1xx manual on Windows 11 | Safari / Firefox not checked |

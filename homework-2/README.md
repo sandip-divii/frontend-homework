@@ -9,7 +9,7 @@ states, test cases, Playwright (read-only + separate mutation suite) and a QA bu
 | **Demo** | https://frontend-homework-2-red.vercel.app — Vercel (functions in Tokyo) + the same API on a free **TiDB Cloud Starter** MySQL-compatible database in Tokyo. Log in as `bookplate` / `Bookplate2026!` to add, edit and delete. Local run: see "Run it". |
 | **Repo** | https://github.com/sandip-divii/frontend-homework (public) — this homework lives in [`homework-2/`](https://github.com/sandip-divii/frontend-homework/tree/main/homework-2) |
 | **Design** | Figma [list frame](https://www.figma.com/design/7yxIdnZegxBVEiqyV3oQmA/XP-%7C-Bookplate-design?node-id=1600-38779) · [login frame](https://www.figma.com/design/7yxIdnZegxBVEiqyV3oQmA/XP-%7C-Bookplate-design?node-id=3429-36106); create / detail / edit screens reuse the same primitives (no Figma frame exists for them) |
-| **Docs** | [Test cases (WM QA format)](docs/TEST-CASES.md) · [QA build report](docs/BUILD-REPORT.md) · [Design check](docs/DESIGN-CHECK.md) · [Plan](docs/PLAN.md) |
+| **Docs** | [QA hand-over](docs/QA-HANDOVER.md) · [Test cases (WM QA format)](docs/TEST-CASES.md) · [QA build report](docs/BUILD-REPORT.md) · [Design check](docs/DESIGN-CHECK.md) · [Plan](docs/PLAN.md) |
 
 ## Screens
 
@@ -48,7 +48,7 @@ Demo accounts (local seed only): see [`db/seed/users.json`](db/seed/users.json) 
 | `npm run build` | production build |
 | `npm run test:e2e` | Playwright, read-only project: login, list widths, form widths, services (page opens, list, states, roles, validation) |
 | `npm run test:e2e:mutation` | Playwright **mutation** project: create → list → edit → delete on the real API (writes to the DB; never run against a shared server) |
-| `npm run test:e2e:all` | both projects |
+| `npm run test:e2e:all` | both projects (HTML report in `playwright-report/`; the one run against the demo is published at [/playwright-report/](https://frontend-homework-2-red.vercel.app/playwright-report/)) |
 | `npm run qa:responsive` / `npm run qa:login` | screenshot subsets |
 
 ## Starting point (copied from Homework 1)

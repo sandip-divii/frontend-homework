@@ -7,7 +7,7 @@ import { expect, test, type Page } from "@playwright/test";
  * For every list state × width: assert no sideways scroll, no tiny controls,
  * then save a full-page screenshot to /screenshots/<state>/<width>.png.
  */
-const WIDTHS = [1920, 1600, 1366, 1280, 1024, 991, 768, 640, 480, 375] as const;
+const WIDTHS = [1920, 1600, 1440, 1366, 1280, 1024, 991, 768, 640, 480, 375] as const; // WM matrix + 1440 (QA)
 
 const STATES = [
   { name: "filled", path: "/", status: "success" },
