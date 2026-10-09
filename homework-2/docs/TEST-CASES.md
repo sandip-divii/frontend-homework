@@ -33,7 +33,7 @@ Areas are the Step 7 table: page opens · main flow · validation · list · rol
 | ID | Type | Precondition | Steps | Expected result | Automation |
 | --- | --- | --- | --- | --- | --- |
 | VA-01 | N | Expert on `/premium-service/new` | Submit with all fields empty | Under the fields: "Title must be at least 2 characters.", "Author is required.", "Price is required."; nothing sent to the API | services.spec › validation |
-| VA-02 | N | Same | Title of 121 chars, Price `-5` | "Title must be 120 characters or fewer.", "Price cannot be negative." | services.spec › validation |
+| VA-02 | N | Same | Title of 121 chars, Price `-5` | "Title must be 120 characters or fewer.", "Price cannot be negative."; the error replaces the field's hint (never both) | services.spec › validation |
 | VA-03 | N | Same | Price `12.5` | "Price must be a whole number." | services.spec › validation |
 | VA-04 | N | Same | Description of 2001 chars | Counter stops at 2000 / 2000 (maxLength) | manual |
 | VA-05 | N | Expert session | `POST /api/services` with `{category:"nope", title:"a", author:"", price:-1}` | 422 with `error.fields` for category, title, author, price — same messages as the form | services.spec › server-side validation |
@@ -50,7 +50,7 @@ Areas are the Step 7 table: page opens · main flow · validation · list · rol
 | LI-02 | N | Seed | Tab **Typo inspection** | Empty state "No typo inspection services yet" with **Show all services** | services.spec › list |
 | LI-03 | N | Seed | Search "zzz-no-such-service" | "No results for “zzz-no-such-service”" | services.spec › list |
 | LI-04 | P | Seed | Sort → **Price: high to low** | First card price ≥ last card price | services.spec › list |
-| LI-05 | P | Seed | Pagination → **2** | Page 2 is current; first card differs from page 1 | services.spec › list |
+| LI-05 | P | Seed | Pagination → **2** | On page 1 First / Previous have aria-disabled="true" (not colour alone); after the click page 2 is current and the first card differs from page 1 | services.spec › list |
 | LI-06 | P | Seed | Tab **Internal design** | 8 cards, pagination hidden | manual |
 | LI-07 | N | Seed | `GET /api/services?page=0` | 422 (invalid query) | manual (curl) |
 | LI-08 | P | Seed | Tab **Cover design** → page **2** → reload the browser | URL is `/?category=cover&page=2`; after the reload the tab is still active, page 2 is current and the heading reads "Cover design" (filter state lives in the URL) | services.spec › list |
@@ -83,7 +83,7 @@ Areas are the Step 7 table: page opens · main flow · validation · list · rol
 
 | ID | Type | Precondition | Steps | Expected result | Automation |
 | --- | --- | --- | --- | --- | --- |
-| SS-01 | P | Seed | `/` at 1920, 1600, 1440, 1366, 1280, 1024, 991, 768, 640, 480, 375 × filled / loading / empty | No sideways scroll; no control under 24 px; 12 cards; screenshots in `screenshots/` | responsive.spec (33) |
+| SS-01 | P | Seed | `/` at 1920, 1600, 1440, 1366, 1280, 1024, 991, 768, 640, 480, 375 × filled / loading / empty | No sideways scroll; no control under 24 px; 12 cards; the last category tab (“Correction / Alignment”) is fully inside the page (tabs wrap at phone width); the sort box is 48 px; screenshots in `screenshots/` | responsive.spec (33) |
 | SS-02 | P | Expert | `/premium-service/new`, `/premium-service/1`, `/premium-service/1/edit` at 1920, 1440, 1366, 768, 375 | No sideways scroll; screenshots in `screenshots/forms/` | responsive-forms.spec (15) |
 | SS-03 | P | — | `/login` at 1920, 1440, 1366, 768, 375 (default + error) | No sideways scroll; screenshots in `screenshots/login/` | login.spec (5 of 9) |
 | SS-04 | P | — | 375: open the header menu | Nav items stack full width; Esc closes | manual |

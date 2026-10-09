@@ -38,9 +38,11 @@
     color: var(--color-txt-1);
   }
 
-  &:disabled {
+  // Disabled = line1 colour + aria-disabled + not-allowed cursor, so the state is not shown by colour alone.
+  &:disabled,
+  &[aria-disabled="true"] {
     color: var(--color-line-1);
-    cursor: default;
+    cursor: not-allowed;
   }
 }
 

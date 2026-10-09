@@ -101,6 +101,10 @@ test.describe("list behaviour", () => {
     await expect(page.locator("[data-list-status='success']")).toBeVisible();
     // Titles repeat in the seed data, so compare the first card's link (contains the id), not its text.
     const firstHref = await page.locator("article h3 a").first().getAttribute("href");
+    // On page 1 the First / Previous arrows are disabled for assistive tech too, not by colour alone.
+    await expect(page.getByRole("button", { name: "First page" })).toHaveAttribute("aria-disabled", "true");
+    await expect(page.getByRole("button", { name: "Previous page" })).toHaveAttribute("aria-disabled", "true");
+    await expect(page.getByRole("button", { name: "Next page" })).toHaveAttribute("aria-disabled", "false");
     await page.getByRole("button", { name: "Page 2" }).click();
     await expect(page.getByRole("button", { name: "Page 2" })).toHaveAttribute("aria-current", "page");
     await expect(page.locator("[data-list-status='success']")).toBeVisible();
@@ -175,6 +179,9 @@ test.describe("validation (create form, expert)", () => {
     await page.getByRole("button", { name: "Add service" }).click();
     await expect(fieldError(page, "service-title")).toHaveText("Title must be 120 characters or fewer.");
     await expect(fieldError(page, "service-price")).toHaveText("Price cannot be negative.");
+    // The error replaces the hint (design: one message under a field, never both).
+    await expect(page.locator("#service-title-hint")).toHaveCount(0);
+    await expect(page.locator("#service-author-hint")).toHaveText("Up to 80 characters");
   });
 
   test("wrong format (price is not a whole number)", async ({ page }) => {

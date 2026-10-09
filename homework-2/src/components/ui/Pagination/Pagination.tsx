@@ -32,10 +32,10 @@ export function Pagination({ page, totalPages, onChange, windowSize = 10, classN
 
   return (
     <nav className={cn(styles.pagination, className)} aria-label="Pagination">
-      <button type="button" className={styles.arrow} onClick={go(1)} disabled={isFirst} aria-label="First page">
+      <button type="button" className={styles.arrow} onClick={go(1)} disabled={isFirst} aria-disabled={isFirst} aria-label="First page">
         <Icon name="chevronsLeft" size={16} />
       </button>
-      <button type="button" className={styles.arrow} onClick={go(page - 1)} disabled={isFirst} aria-label="Previous page">
+      <button type="button" className={styles.arrow} onClick={go(page - 1)} disabled={isFirst} aria-disabled={isFirst} aria-label="Previous page">
         <Icon name="chevronLeft" size={16} />
       </button>
 
@@ -55,10 +55,10 @@ export function Pagination({ page, totalPages, onChange, windowSize = 10, classN
         ))}
       </ol>
 
-      <button type="button" className={styles.arrow} onClick={go(page + 1)} disabled={isLast} aria-label="Next page">
+      <button type="button" className={styles.arrow} onClick={go(page + 1)} disabled={isLast} aria-disabled={isLast} aria-label="Next page">
         <Icon name="chevronRight" size={16} />
       </button>
-      <button type="button" className={styles.arrow} onClick={go(totalPages)} disabled={isLast} aria-label="Last page">
+      <button type="button" className={styles.arrow} onClick={go(totalPages)} disabled={isLast} aria-disabled={isLast} aria-label="Last page">
         <Icon name="chevronsRight" size={16} />
       </button>
     </nav>

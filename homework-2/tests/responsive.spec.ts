@@ -53,6 +53,15 @@ for (const state of STATES) {
           await expect(page.locator("article")).toHaveCount(12);
         }
 
+        // Design review (9 Oct): no category tab is cut off at any width, and the sort box is 48px like every control.
+        const lastTab = await page.getByRole("button", { name: "Correction / Alignment" }).boundingBox();
+        const viewport = await page.evaluate(() => document.documentElement.clientWidth);
+        expect(lastTab, "last category tab is rendered").not.toBeNull();
+        expect(lastTab!.x, `last tab starts inside the page at ${width}px`).toBeGreaterThanOrEqual(0);
+        expect(lastTab!.x + lastTab!.width, `last tab is not cut off at ${width}px`).toBeLessThanOrEqual(viewport);
+        const sort = await page.getByRole("button", { name: /^Sort by:/ }).boundingBox();
+        expect(Math.round(sort!.height), `sort box height at ${width}px`).toBe(48);
+
         fs.mkdirSync(path.join(OUT_DIR, state.name), { recursive: true });
         await page.screenshot({
           path: path.join(OUT_DIR, state.name, `${width}.png`),

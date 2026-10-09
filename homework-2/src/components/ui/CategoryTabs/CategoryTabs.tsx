@@ -1,6 +1,5 @@
 "use client";
 
-import { Fragment } from "react";
 import { cn } from "@/lib/cn";
 import styles from "./CategoryTabs.module.scss";
 
@@ -17,7 +16,11 @@ interface CategoryTabsProps<T extends string> {
   className?: string;
 }
 
-/** Text tabs separated by a vertical bar, as in the Figma "btn tap" frame. */
+/**
+ * Text tabs separated by a vertical bar, as in the Figma "btn tap" frame.
+ * Each bar belongs to the tab after it, so when the row wraps (phone widths) a line never starts with a bar
+ * and no tab is ever cut off.
+ */
 export function CategoryTabs<T extends string>({ value, options, onChange, label = "Service categories", className }: CategoryTabsProps<T>) {
   return (
     <nav className={cn(styles.tabs, className)} aria-label={label}>
@@ -25,23 +28,21 @@ export function CategoryTabs<T extends string>({ value, options, onChange, label
         {options.map((option, index) => {
           const active = option.id === value;
           return (
-            <Fragment key={option.id}>
+            <li key={option.id} className={styles.item}>
               {index > 0 ? (
-                <li className={styles.divider} aria-hidden="true">
+                <span className={styles.divider} aria-hidden="true">
                   |
-                </li>
+                </span>
               ) : null}
-              <li>
-                <button
+              <button
                   type="button"
                   className={cn(styles.tab, active && styles.active)}
                   aria-pressed={active}
                   onClick={() => onChange(option.id)}
                 >
-                  {option.label}
-                </button>
-              </li>
-            </Fragment>
+                {option.label}
+              </button>
+            </li>
           );
         })}
       </ul>

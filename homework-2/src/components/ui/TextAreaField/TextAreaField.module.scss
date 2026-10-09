@@ -32,7 +32,7 @@
   transition: border-color var(--dur-fast) var(--ease);
 
   &::placeholder {
-    color: var(--color-line-1);
+    color: var(--color-placeholder);
   }
 
   &:focus {

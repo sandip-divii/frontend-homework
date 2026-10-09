@@ -2,21 +2,34 @@
 
 .tabs {
   min-width: 0;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
 }
 
+// One row on desktop; at phone widths the row wraps instead of scrolling behind a hidden scrollbar,
+// so "Correction / Alignment" is never cut off (design review, 9 Oct).
 .list {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: var(--space-3);
+  min-height: var(--control-h-sm);
+}
+
+.item {
+  display: inline-flex;
   align-items: center;
   gap: var(--space-3);
-  min-height: var(--control-h-sm);
   white-space: nowrap;
+}
+
+// Phone widths: the row wraps onto two lines, so the bars go (a line must not start with "|") and the gap widens.
+@include down($bp-xs) {
+  .list {
+    column-gap: var(--space-5);
+  }
+
+  .divider {
+    display: none;
+  }
 }
 
 .divider {

@@ -26,7 +26,9 @@ interface SelectFieldProps<T extends string> {
 export function SelectField<T extends string>({ id, name, label, value, options, onChange, error, hint, required, className }: SelectFieldProps<T>) {
   const errorId = `${id}-error`;
   const hintId = `${id}-hint`;
-  const describedBy = [error ? errorId : null, hint ? hintId : null].filter(Boolean).join(" ") || undefined;
+  // The error replaces the hint (design: one line under the field, never both).
+  const showHint = Boolean(hint) && !error;
+  const describedBy = (error ? errorId : showHint ? hintId : undefined) ?? undefined;
 
   return (
     <div className={cn(styles.field, className)}>
@@ -52,7 +54,7 @@ export function SelectField<T extends string>({ id, name, label, value, options,
         </select>
         <Icon name="chevronDown" size={16} className={styles.chevron} />
       </div>
-      {hint ? (
+      {showHint ? (
         <p id={hintId} className={styles.hint}>
           {hint}
         </p>

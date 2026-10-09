@@ -54,7 +54,7 @@
   outline: none;
 
   &::placeholder {
-    color: var(--color-line-1);
+    color: var(--color-placeholder);
   }
 
   &::-ms-reveal {
