@@ -76,6 +76,9 @@ Server by default (pages, `Header`, `Footer`, the detail page shell). `"use clie
 **Q22. Why do the list filters live in the URL, and how is that done without a server round trip?**
 A filtered list is a place the user can share, reload and come back to; before, `router.push("/")` after a save threw the filters away. `PremiumServiceList` reads them with `useSearchParams` (`listParams.ts` validates every value) and writes them with the native `window.history.replaceState`, which Next.js ≥ 14.1 syncs into `useSearchParams` without re-rendering the Server Components. `?state=` for QA is kept untouched.
 
+**Q22b. And how do the filters survive going to a detail page, editing or deleting?**
+The list puts its own query into `?back=` on every card link and on **Add service** (`withBack`). The detail, create and edit pages read it on the server, clean it with `cleanBack` (re-parsed into the known keys, so a forged value can only ever produce `/`), and pass it down; **Back to the list**, **Cancel**, the breadcrumb and the redirects after create / edit / delete all go to `listHref(back)`. The first resubmission only kept filters on reload and the browser back button; QA caught that, and the mutation suite now runs the whole create → edit → delete from `/?category=typo` and asserts it lands back there each time.
+
 **Q23. Why does `/premium-service/new` redirect to `/login?next=...` and how is `next` kept safe?**
 The page checks the session on the server and calls `redirect()`. `LoginPage` only accepts a `next` that starts with `/` and not `//`, so the app cannot be used to bounce users to another site.
 
@@ -134,7 +137,7 @@ Semantic landmarks and a skip link, labelled icon buttons, `aria-current` on nav
 ## G. Testing and hand-over
 
 **Q40. What do the Playwright suites cover, and why is mutation separate?**
-`services.spec.ts`: page opens, list behaviour (incl. URL filters), states, roles, validation (read-only, 18 tests). `services.mutation.spec.ts`: create → list → edit → delete on the real DB; it is a separate Playwright project so it never runs by accident on a shared server, and it deletes its own row. Plus responsive (33 + 15) and login (9) suites: 75 read-only + 3 mutation pass locally and against the hosted demo.
+`services.spec.ts`: page opens, list behaviour (incl. URL filters and the `?back=` round trip), states, roles, validation (read-only, 19 tests). `services.mutation.spec.ts`: create → list → edit → delete on the real DB; it is a separate Playwright project so it never runs by accident on a shared server, and it deletes its own row. Plus responsive (33 + 15) and login (9) suites: 76 read-only + 3 mutation pass locally and against the hosted demo.
 
 **Q41. What did the tests find?**
 Three real defects: an empty price accepted as 0, the HW1 header nav overlapping the icons at 1920 (the Figma frame has the same overflow), and, while writing the PUT test, zod's raw "expected string, received undefined" leaking out of the API. All fixed and documented.

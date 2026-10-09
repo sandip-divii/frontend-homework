@@ -3,7 +3,7 @@
 Format follows the WM QA Template ("Verify that …" cases with ID, precondition, steps, expected result).
 Areas are the Step 7 table: page opens · main flow · validation · list · roles · states · screen sizes.
 
-**Type:** **P** = positive (the happy path works) · **N** = negative (wrong input, wrong role, missing data, failure is handled). 43 cases: 20 P · 23 N.
+**Type:** **P** = positive (the happy path works) · **N** = negative (wrong input, wrong role, missing data, failure is handled). 45 cases: 21 P · 24 N.
 **Accounts** (local seed, `db/seed/users.json`): `bookplate` = expert (can manage services) · `reviewer` = plain user.
 **Base URL:** http://localhost:3001 (or the hosted demo https://frontend-homework-2-red.vercel.app) · **Data:** `npm run db:reset` gives 50 services (36 cover, 8 internal, 6 correction, 0 typo).
 **Automation column:** the Playwright test that covers the case (`tests/*.spec.ts`), or "manual".
@@ -21,10 +21,10 @@ Areas are the Step 7 table: page opens · main flow · validation · list · rol
 
 | ID | Type | Precondition | Steps | Expected result | Automation |
 | --- | --- | --- | --- | --- | --- |
-| MF-01 | P | Logged in as `bookplate` | `/` → **Add service** → fill Category=Typo inspection, Title, Author, Price=12345, Description → **Add service** | Toast "Service added."; redirected to `/`; searching the title shows one card with price `12,345` | services.mutation.spec |
-| MF-02 | P | MF-01 done | Open the card → **Edit** | Form pre-filled with the saved values | services.mutation.spec |
-| MF-03 | P | MF-02 | Change Title and Price=20000 → **Save changes** | Toast "Service updated."; back on the detail page, which shows the new title, `20,000` and a later Updated time | services.mutation.spec |
-| MF-04 | P | MF-03 | Detail → **Delete** → dialog → **Delete** | Dialog "Delete this service?" names the service; toast "… was deleted."; redirected to `/`; `GET /api/services/:id` → 404 | services.mutation.spec |
+| MF-01 | P | Logged in as `bookplate` | Open the filtered list `/?category=typo` → **Add service** (URL carries `?back=category%3Dtypo`) → fill Category=Typo inspection, Title, Author, Price=12345, Description → **Add service** | Toast "Service added."; back on the same filtered list `/?category=typo` (tab still active); the new card is there without a reload, price `12,345` | services.mutation.spec |
+| MF-02 | P | MF-01 done | From `/?category=typo` open the card → **Edit** | Edit URL keeps `?back=category%3Dtypo`; form pre-filled with the saved values | services.mutation.spec |
+| MF-03 | P | MF-02 | Change Title and Price=20000 → **Save changes** → **Back to the list** | Toast "Service updated."; back on the detail page (still carrying `?back=`), which shows the new title, `20,000` and a later Updated time; **Back to the list** returns to `/?category=typo` with the edited card | services.mutation.spec |
+| MF-04 | P | MF-03 | From `/?category=typo` open the card → **Delete** → dialog → **Delete** | Dialog "Delete this service?" names the service; toast "… was deleted."; back on the same filtered list `/?category=typo` without the card; `GET /api/services/:id` → 404 | services.mutation.spec |
 | MF-05 | N | MF-04 | Dialog → **Cancel** (or Esc) | Dialog closes, nothing deleted | manual |
 | MF-06 | N | Logged in as expert | On the create form click **Add service** twice quickly | Only one record is created (button disabled while saving, label "Saving…") | manual |
 
@@ -54,6 +54,8 @@ Areas are the Step 7 table: page opens · main flow · validation · list · rol
 | LI-06 | P | Seed | Tab **Internal design** | 8 cards, pagination hidden | manual |
 | LI-07 | N | Seed | `GET /api/services?page=0` | 422 (invalid query) | manual (curl) |
 | LI-08 | P | Seed | Tab **Cover design** → page **2** → reload the browser | URL is `/?category=cover&page=2`; after the reload the tab is still active, page 2 is current and the heading reads "Cover design" (filter state lives in the URL) | services.spec › list |
+| LI-09 | P | Seed | Tab **Cover design** → page **2** → open a card → **Back to the list** | Detail URL carries `?back=category%3Dcover%26page%3D2`; **Back to the list** returns to `/?category=cover&page=2` with the tab active and page 2 current (same for Cancel, the breadcrumb, and after create / edit / delete, see MF-01–04) | services.spec › list |
+| LI-10 | N | Seed | Open `/premium-service/1?back=https%3A%2F%2Fexample.com%2F%3Fcategory%3Dnope%26evil%3D1` | **Back to the list** points to `/`: `?back=` only keeps known list keys with valid values, so it can never leave the list | services.spec › list |
 
 ## 5. Roles
 
@@ -86,4 +88,4 @@ Areas are the Step 7 table: page opens · main flow · validation · list · rol
 | SS-03 | P | — | `/login` at 1920, 1440, 1366, 768, 375 (default + error) | No sideways scroll; screenshots in `screenshots/login/` | login.spec (5 of 9) |
 | SS-04 | P | — | 375: open the header menu | Nav items stack full width; Esc closes | manual |
 
-**Playwright totals:** read-only project `chromium` = 75 tests (services 18 · login 9 · responsive 33 · responsive-forms 15); project `mutation` = 3 tests (MF-01 → MF-04). `npm run test:e2e:all` runs 78.
+**Playwright totals:** read-only project `chromium` = 76 tests (services 19 · login 9 · responsive 33 · responsive-forms 15); project `mutation` = 3 tests (MF-01 → MF-04, run from a filtered list). `npm run test:e2e:all` runs 79.

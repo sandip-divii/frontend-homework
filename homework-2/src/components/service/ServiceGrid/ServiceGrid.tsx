@@ -9,6 +9,8 @@ import styles from "./ServiceGrid.module.scss";
 interface ServiceGridProps {
   status: ListStatus;
   items: readonly ExpertService[];
+  /** Link for each card (the list adds its `?back=` query); defaults to the plain detail URL. */
+  itemHref?: (service: ExpertService) => string;
   skeletonCount?: number;
   /** Shown in the empty state; describes the active filter. */
   emptyTitle?: string;
@@ -21,6 +23,7 @@ interface ServiceGridProps {
 export function ServiceGrid({
   status,
   items,
+  itemHref,
   skeletonCount = 12,
   emptyTitle = "No services found",
   emptyDescription = "Try another category or search term.",
@@ -52,7 +55,7 @@ export function ServiceGrid({
         <ul className={styles.grid}>
           {items.map((service, index) => (
             <li key={service.id}>
-              <ServiceCard service={service} priority={index < 3} />
+              <ServiceCard service={service} href={itemHref?.(service)} priority={index < 3} />
             </li>
           ))}
         </ul>

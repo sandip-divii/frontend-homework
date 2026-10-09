@@ -27,6 +27,37 @@ export function readListParams(searchParams: URLSearchParams): ListParams {
   };
 }
 
+/**
+ * Round trip list → detail / form → list. Screens opened from the list carry the list's query in
+ * `?back=` (e.g. `/premium-service/13?back=category%3Dcover%26page%3D2`), and every way back to the
+ * list (Back to the list, Cancel, after create / edit / delete) returns to that exact list.
+ */
+export const BACK_PARAM = "back";
+
+/** The list's own query without QA keys or defaults, e.g. "category=cover&page=2" ("" for the plain list). */
+export function listQuery(params: ListParams): string {
+  return writeListParams(new URLSearchParams(), params).toString();
+}
+
+/**
+ * Validates a raw `?back=` value: it is re-parsed into ListParams and written again, so only the
+ * known keys with valid values survive and it can never point anywhere but the list.
+ */
+export function cleanBack(raw: string | string[] | null | undefined): string {
+  const value = Array.isArray(raw) ? raw[0] : raw;
+  return value ? listQuery(readListParams(new URLSearchParams(value))) : "";
+}
+
+/** "/?category=cover&page=2", or "/" when there is nothing to keep. */
+export function listHref(back: string): string {
+  return back ? `/?${back}` : "/";
+}
+
+/** `path?back=<list query>` so the next screen can return to the same list. */
+export function withBack(path: string, back: string): string {
+  return back ? `${path}?${BACK_PARAM}=${encodeURIComponent(back)}` : path;
+}
+
 /** ListParams → query string, keeping unrelated keys (e.g. `?state=` for QA) and dropping defaults. */
 export function writeListParams(searchParams: URLSearchParams, params: ListParams): URLSearchParams {
   const next = new URLSearchParams(searchParams);

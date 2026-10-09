@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button/Button";
 import { Icon } from "@/components/ui/Icon/Icon";
 import { LocalDateTime } from "@/components/ui/LocalDateTime/LocalDateTime";
 import { CATEGORY_LABEL } from "@/data/categories";
+import { listHref } from "@/features/premium-service/listParams";
 import { useServiceQuery } from "@/hooks/API/services/useServiceQuery";
 import { formatNumber, formatPrice, formatRating } from "@/lib/format";
 import type { ExpertService } from "@/types/service";
@@ -17,10 +18,12 @@ interface ServiceDetailProps {
   initial: ExpertService;
   /** Experts / admins get Edit / Delete. */
   canManage: boolean;
+  /** Validated list query from `?back=` ("" = plain list): "Back to the list" and Delete return there. */
+  back: string;
 }
 
 /** Detail body. Reads the service through the details hook so edits and deletes keep the cache in step. */
-export function ServiceDetail({ initial, canManage }: ServiceDetailProps) {
+export function ServiceDetail({ initial, canManage, back }: ServiceDetailProps) {
   const { data: service } = useServiceQuery(initial.id, initial);
 
   return (
@@ -76,10 +79,10 @@ export function ServiceDetail({ initial, canManage }: ServiceDetailProps) {
         </dl>
 
         <div className={styles.actions}>
-          <Button href="/" variant="ghost" size="md">
+          <Button href={listHref(back)} variant="ghost" size="md">
             Back to the list
           </Button>
-          {canManage ? <ServiceActions service={service} /> : null}
+          {canManage ? <ServiceActions service={service} back={back} /> : null}
         </div>
       </div>
     </article>

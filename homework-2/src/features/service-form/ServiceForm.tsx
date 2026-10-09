@@ -10,6 +10,7 @@ import { TextAreaField } from "@/components/ui/TextAreaField/TextAreaField";
 import { TextField } from "@/components/ui/TextField/TextField";
 import { useToast } from "@/components/ui/Toast/ToastProvider";
 import { CATEGORY_LABEL } from "@/data/categories";
+import { listHref, withBack } from "@/features/premium-service/listParams";
 import { useCreateService, useUpdateService } from "@/hooks/API/services/useServiceMutations";
 import { formatPrice } from "@/lib/format";
 import { SERVICE_CATEGORIES, serviceInputSchema } from "@/lib/validation/service";
@@ -36,6 +37,8 @@ interface ServiceFormProps {
   mode: "create" | "edit";
   /** Required in edit mode; pre-fills the form. */
   initial?: ExpertService;
+  /** Validated list query from `?back=` ("" = plain list): Cancel and success return to that list (create) or carry it on (edit). */
+  back?: string;
 }
 
 const CATEGORY_OPTIONS = SERVICE_CATEGORIES.map((id) => ({ value: id, label: CATEGORY_LABEL[id] }));
@@ -54,7 +57,7 @@ function firstMessages(fields: Record<string, string[] | undefined>): FieldError
  * and its 422 field errors are mapped back onto the fields. On success the mutation hook has already
  * invalidated the list / details cache, so: toast → list (create) or the detail page (edit).
  */
-export function ServiceForm({ mode, initial }: ServiceFormProps) {
+export function ServiceForm({ mode, initial, back = "" }: ServiceFormProps) {
   const router = useRouter();
   const toast = useToast();
   const createMutation = useCreateService();
@@ -95,11 +98,11 @@ export function ServiceForm({ mode, initial }: ServiceFormProps) {
       if (mode === "create") {
         await createMutation.mutateAsync(parsed.data);
         toast.push(FORM_MESSAGES.created);
-        router.push("/");
+        router.push(listHref(back));
       } else if (initial) {
         await updateMutation.mutateAsync({ id: initial.id, input: parsed.data });
         toast.push(FORM_MESSAGES.updated);
-        router.push(`/premium-service/${initial.id}`);
+        router.push(withBack(`/premium-service/${initial.id}`, back));
       }
     } catch (err) {
       if (err instanceof ApiError) {
@@ -139,7 +142,7 @@ export function ServiceForm({ mode, initial }: ServiceFormProps) {
       </div>
 
       <div className={styles.actions}>
-        <Button variant="outline" size="md" href={mode === "edit" && initial ? `/premium-service/${initial.id}` : "/"}>
+        <Button variant="outline" size="md" href={mode === "edit" && initial ? withBack(`/premium-service/${initial.id}`, back) : listHref(back)}>
           Cancel
         </Button>
         <Button type="submit" size="md" disabled={pending}>

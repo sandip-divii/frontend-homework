@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/Button/Button";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog/ConfirmDialog";
 import { useToast } from "@/components/ui/Toast/ToastProvider";
+import { listHref, withBack } from "@/features/premium-service/listParams";
 import { useDeleteService } from "@/hooks/API/services/useServiceMutations";
 import { ApiError } from "@/services/http";
 import type { ExpertService } from "@/types/service";
@@ -12,10 +13,12 @@ import styles from "./ServiceActions.module.scss";
 
 interface ServiceActionsProps {
   service: ExpertService;
+  /** Validated list query from `?back=` ("" = plain list); Edit carries it on, Delete returns to it. */
+  back: string;
 }
 
-/** Edit / Delete for managers. Delete asks for confirmation, then returns to the (invalidated) list. */
-export function ServiceActions({ service }: ServiceActionsProps) {
+/** Edit / Delete for managers. Delete asks for confirmation, then returns to the same (invalidated) list. */
+export function ServiceActions({ service, back }: ServiceActionsProps) {
   const router = useRouter();
   const toast = useToast();
   const deleteMutation = useDeleteService();
@@ -26,7 +29,7 @@ export function ServiceActions({ service }: ServiceActionsProps) {
       await deleteMutation.mutateAsync(service.id);
       setConfirming(false);
       toast.push(`"${service.title}" was deleted.`);
-      router.push("/");
+      router.push(listHref(back));
     } catch (err) {
       setConfirming(false);
       toast.push(err instanceof ApiError ? err.message : "Could not delete the service. Please try again.", "error");
@@ -35,7 +38,7 @@ export function ServiceActions({ service }: ServiceActionsProps) {
 
   return (
     <div className={styles.actions}>
-      <Button href={`/premium-service/${service.id}/edit`} variant="outline" size="md">
+      <Button href={withBack(`/premium-service/${service.id}/edit`, back)} variant="outline" size="md">
         Edit
       </Button>
       <Button variant="outline" size="md" onClick={() => setConfirming(true)} className={styles.danger}>

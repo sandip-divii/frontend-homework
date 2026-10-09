@@ -10,14 +10,15 @@ import styles from "./ServiceCard.module.scss";
 
 interface ServiceCardProps {
   service: ExpertService;
+  /** Detail link; the list passes one that carries its filters. Defaults to the plain detail URL. */
+  href?: string;
   /** True for above-the-fold cards so the LCP image is not lazy-loaded. */
   priority?: boolean;
 }
 
 const IMAGE_SIZES = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 413px";
 
-export function ServiceCard({ service, priority = false }: ServiceCardProps) {
-  const href = `/premium-service/${service.id}`;
+export function ServiceCard({ service, href = `/premium-service/${service.id}`, priority = false }: ServiceCardProps) {
 
   return (
     <article className={styles.card}>

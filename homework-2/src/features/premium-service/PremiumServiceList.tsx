@@ -12,7 +12,7 @@ import { ServiceGrid } from "@/components/service/ServiceGrid/ServiceGrid";
 import { CATEGORIES, CATEGORY_LABEL, PAGE_SIZE, SORT_OPTIONS } from "@/data/categories";
 import { useServicesQuery } from "@/hooks/API/services/useServicesQuery";
 import type { ForcedState } from "./forcedState";
-import { DEFAULT_LIST_PARAMS, readListParams, writeListParams, type ListParams } from "./listParams";
+import { DEFAULT_LIST_PARAMS, listQuery, readListParams, withBack, writeListParams, type ListParams } from "./listParams";
 import styles from "./PremiumServiceList.module.scss";
 
 interface PremiumServiceListProps {
@@ -23,9 +23,10 @@ interface PremiumServiceListProps {
 }
 
 /**
- * List screen. Filter state (category, keyword, sort, page) lives in the URL query string, so it
- * survives create / edit / delete round trips and the back button; the search box draft is local
- * until submitted. Server data comes from the TanStack Query list hook.
+ * List screen. Filter state (category, keyword, sort, page) lives in the URL query string; links to the
+ * detail and create screens carry it in `?back=`, so every way back (Back to the list, Cancel, after
+ * create / edit / delete) lands on the same list. The search box draft is local until submitted.
+ * Server data comes from the TanStack Query list hook.
  */
 export function PremiumServiceList({ forcedState, canManage = false }: PremiumServiceListProps) {
   const topRef = useRef<HTMLDivElement>(null);
@@ -33,6 +34,8 @@ export function PremiumServiceList({ forcedState, canManage = false }: PremiumSe
   const searchParams = useSearchParams();
   const params = useMemo(() => readListParams(searchParams), [searchParams]);
   const [draft, setDraft] = useState(params.keyword);
+  // Cards and "Add service" carry the current list in ?back=, so those screens can return to it.
+  const back = listQuery(params);
 
   const { status, data, refetch } = useServicesQuery(
     { category: params.category, keyword: params.keyword, sort: params.sort, page: params.page, pageSize: PAGE_SIZE },
@@ -85,7 +88,7 @@ export function PremiumServiceList({ forcedState, canManage = false }: PremiumSe
 
         <div className={styles.controls}>
           {canManage ? (
-            <Button href="/premium-service/new" size="md" icon="arrowRight">
+            <Button href={withBack("/premium-service/new", back)} size="md" icon="arrowRight">
               Add service
             </Button>
           ) : (
@@ -98,6 +101,7 @@ export function PremiumServiceList({ forcedState, canManage = false }: PremiumSe
           className={styles.list}
           status={status}
           items={data?.items ?? []}
+          itemHref={(service) => withBack(`/premium-service/${service.id}`, back)}
           skeletonCount={PAGE_SIZE}
           emptyTitle={emptyTitle}
           emptyDescription={emptyDescription}

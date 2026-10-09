@@ -81,6 +81,21 @@ test.describe("list behaviour", () => {
     await expect(page.getByRole("heading", { name: "Cover design", level: 2 })).toBeVisible();
   });
 
+  test("detail and back keep the list filters; a forged ?back= cannot leave the list", async ({ page }) => {
+    await page.goto("/?category=cover&page=2");
+    await expect(page.locator("[data-list-status='success']")).toBeVisible();
+    await page.locator("article h3 a").first().click();
+    await expect(page).toHaveURL(/\/premium-service\/\d+\?back=category%3Dcover%26page%3D2$/);
+    await page.getByRole("link", { name: "Back to the list" }).click();
+    await expect(page).toHaveURL(/\/\?category=cover&page=2$/);
+    await expect(page.getByRole("button", { name: "Page 2" })).toHaveAttribute("aria-current", "page");
+    await expect(page.getByRole("button", { name: "Cover design" })).toHaveAttribute("aria-pressed", "true");
+
+    // Only known list keys with valid values survive; anything else falls back to the plain list.
+    await page.goto(`/premium-service/1?back=${encodeURIComponent("https://example.com/?category=nope&evil=1")}`);
+    await expect(page.getByRole("link", { name: "Back to the list" })).toHaveAttribute("href", "/");
+  });
+
   test("pagination moves to the next page", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("[data-list-status='success']")).toBeVisible();
@@ -129,12 +144,12 @@ test.describe("roles", () => {
     expect((await res.json()).error.message).toBe("Only experts and admins can manage services.");
   });
 
-  test("expert: Add button and Edit / Delete are visible", async ({ page }) => {
+  test("expert: Add button and Edit / Delete are visible, and they carry the list filters", async ({ page }) => {
     await loginAs(page, EXPERT);
-    await page.goto("/");
-    await expect(page.getByRole("link", { name: "Add service" })).toBeVisible();
-    await page.goto("/premium-service/1");
-    await expect(page.getByRole("link", { name: "Edit" })).toBeVisible();
+    await page.goto("/?category=internal");
+    await expect(page.getByRole("link", { name: "Add service" })).toHaveAttribute("href", "/premium-service/new?back=category%3Dinternal");
+    await page.goto("/premium-service/1?back=category%3Dinternal");
+    await expect(page.getByRole("link", { name: "Edit" })).toHaveAttribute("href", "/premium-service/1/edit?back=category%3Dinternal");
     await expect(page.getByRole("button", { name: "Delete" })).toBeVisible();
   });
 });
