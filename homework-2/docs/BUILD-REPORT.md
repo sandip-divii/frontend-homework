@@ -10,14 +10,14 @@ Written as a hand-over to QA: everything needed to test is on this page or linke
 | Repository | https://github.com/sandip-divii/frontend-homework (public) |
 | Branch | `main` |
 | Folder | `homework-2/` |
-| Commit (deployed build) | `20141c7` — second resubmission: list filters kept across detail / create / edit / delete (QA review of 2026-10-09). History: `eae15ca` TanStack Query + code-review fixes (2026-10-08), `04d331e` first submission (2026-10-07). Commits after `20141c7` only add this report and the published HTML report; the app code is identical. |
+| Commit (deployed build) | `048e16e` — third resubmission: design-review fixes (category tabs wrap at 375, 48 px sort box, aria-disabled pager arrows, one placeholder colour, a field's error replaces its hint). History: `20141c7` list filters across round trips (QA review, 9 Oct), `eae15ca` TanStack Query + code-review fixes (8 Oct), `04d331e` first submission (7 Oct). Commits after `048e16e` only add docs, design frames and the published HTML report; the app code is identical. |
 | Date | 2026-10-09 |
 | Demo | https://frontend-homework-2-red.vercel.app — Vercel (Tokyo functions) + TiDB Cloud Starter (free, MySQL-compatible, Tokyo). Same code and seed as local; `DATABASE_SSL=true` enables TLS. |
 
 ## 2. TL tasks covered
 
 - TL | AI Frontend Training — Homework 2 (Steps 3–8): https://app.notion.com/p/3e9326b2d5fb80c0872def7b6a848d3c
-- Submission page: https://app.notion.com/p/3f0326b2d5fb815ca71dc64c50a11044 — code review (Vaishali, 2026-10-08) and QA review (Archana, 2026-10-09) feedback addressed in this build, see part 4.
+- Submission page: https://app.notion.com/p/3f0326b2d5fb815ca71dc64c50a11044 — code review (Vaishali, 2026-10-08) QA review (Archana, 2026-10-09) and design review (Bhagyashree, 2026-10-09) feedback addressed in this build, see part 4.
 
 ## 3. What changed, in plain words
 
@@ -32,13 +32,19 @@ The "Premium Paid Services" list from Homework 1 runs on a real database and a r
 7. **Not found.** A wrong service id shows a proper 404 page.
 8. **Since the first submission (resubmission, 2026-10-08):** the client data layer uses **TanStack Query** (`src/hooks/API/services`, `src/hooks/API/auth`): the list and the details are cached by key and every create / edit / delete invalidates them, so lists refresh without being remounted. The list's search, category, sort and page now live in the **URL** (`/?category=cover&page=2`), so they survive a reload and the back button, and a filtered list can be shared.
 9. **Since the QA review (second resubmission, 2026-10-09):** the filters also survive the round trip through the other screens. Cards and **Add service** carry the list in `?back=`; **Back to the list**, **Cancel**, the breadcrumb and the redirect after create / edit / delete all return to that exact list (e.g. `/?category=cover&page=2`). The first resubmission only kept them on reload and the browser back button, although the docs said otherwise.
+10. **Since the design review (third resubmission, 2026-10-09):** the screens without a Figma frame now have a design of their own, drawn in Claude Design (list at 1440 and 375, add / edit with validation, detail with the delete dialog: https://claude.ai/artifact/LwFG2D17YvLRRXYxn3Ti6D, PNG exports in `docs/design/frames/`). The build was brought in line with it: category tabs wrap at phone width instead of hiding behind a scrollbar, the sort box is 48 px, disabled pager arrows say so to assistive tech, every placeholder uses one colour, and a field shows its error instead of its hint.
 
 ## 4. Fixed issues
 
 | Issue | Fix |
 | --- | --- |
+| Design review: category tabs cut off at 375 (“Correction / Alignment”) | Tabs wrap; below 640 px the bars are hidden so no line starts with “|”. `responsive.spec.ts` asserts at all 11 widths that the last tab is inside the page |
+| Design review: sort box 40 px, every other control 48 px | Sort box 48 px; `--control-h-xs` removed; asserted at all 11 widths |
+| Design review: disabled pager arrows shown by colour only | `aria-disabled` + not-allowed cursor; asserted in the pagination test |
+| Design review: only two (pre-existing) Figma frames, no own design for add / edit / detail / list 375 | Frames drawn in Claude Design with the Figma tokens plus three new variables (bg/beige, txt/placeholder, line2/card); side by side with the build in `docs/design-compare/frame-*.png` |
+| Design-vs-build comparison: form fields used #cccccc placeholders; a field showed its hint and its error together (“Shown as 13” under 12.5) | One placeholder token (#b5b5b5); the error replaces the hint (TextField, SelectField); asserted in the validation test |
 | QA review: search / filter / page lost after create, edit or delete (the first resubmission said they survived; they only survived a reload) | Cards and **Add service** carry the list query in `?back=` (validated by `cleanBack`, so a forged value can only produce `/`); every way back uses it. Tests: LI-09 / LI-10 in `services.spec.ts`, and the mutation suite now runs create → edit → delete from `/?category=typo` and asserts it returns there each time |
-| QA review: page, build report and QA pack named three different commits and test counts | One deployed commit (`20141c7`) and one result set (part 9) on this report, the hand-over, the submission page and the QA pack page |
+| QA review: page, build report and QA pack named three different commits and test counts | One deployed commit (`048e16e` today) and one result set (part 9) on this report, the hand-over, the submission page and the QA pack page |
 | QA review: P / N only in the area summary; 41 cases, not 42 | Every case is marked P or N; 45 cases (21 P, 24 N) after adding LI-09 / LI-10 |
 | QA review: report location, widths across documents, shared demo data | Report committed under `public/playwright-report/`; every document lists 1920 / 1440 / 1366 / 768 / 375 for create, detail, edit and login (as `responsive-forms.spec.ts` / `login.spec.ts` test); hosted-demo rules in part 6 and in the hand-over |
 | Review: data hooks were hand-written `useEffect` + `useState` in a flat `src/hooks/`, and the list only refreshed because `router.push("/")` remounted it (losing search / filter / page) | TanStack Query hooks in `src/hooks/API/<domain>/` (list hook keyed by every param, details hook, mutations that invalidate list + detail); filters moved to the URL |
@@ -103,7 +109,7 @@ Full cases with IDs, P / N type, preconditions, steps and expected results: [`do
 
 ## 9. Results of lint, type-check, build and tests
 
-Real output, captured on 2026-10-09 at commit `20141c7` (the deployed build):
+Real output, captured on 2026-10-09 at commit `048e16e` (the deployed build):
 
 ```text
 $ npm run check
@@ -113,49 +119,29 @@ $ npm run check
 exit code: 0
 
 $ npm run build
-✓ Compiled successfully in 1571ms
-Route (app)
-┌ ƒ /
-├ ƒ /_not-found
-├ ƒ /api/auth/login
-├ ƒ /api/auth/logout
-├ ƒ /api/auth/me
-├ ƒ /api/health
-├ ƒ /api/services
-├ ƒ /api/services/[id]
-├ ƒ /login
-├ ƒ /premium-service/[id]
-├ ƒ /premium-service/[id]/edit
-└ ƒ /premium-service/new
-ƒ  (Dynamic)  server-rendered on demand
+✓ Compiled successfully in 1774ms
+Route (app)   12 routes, all ƒ (dynamic) — unchanged
 exit code: 0
 
-$ npm run test:e2e              # chromium project (read-only), local
-Running 76 tests using 1 worker
-76 passed (1.8m)      # services 19 · login 9 · responsive 33 · responsive-forms 15
+$ npx playwright test           # both projects, local
+Running 79 tests using 1 worker
+79 passed (1.8m)      # chromium 76 (services 19 · login 9 · responsive 33 · responsive-forms 15) + mutation 3
 
-$ npm run test:e2e:mutation     # local
-Running 3 tests using 1 worker
-  ok 1 [mutation] › testsservices.mutation.spec.ts:36:7 › … › create from the filtered list, then it shows in that same list (3.2s)
-  ok 2 [mutation] › testsservices.mutation.spec.ts:62:7 › … › edit pre-fills the form, the change shows on the detail page, and Back returns to the filtered list (5.4s)
-  ok 3 [mutation] › testsservices.mutation.spec.ts:84:7 › … › delete asks for confirmation, then returns to the filtered list without the service (3.2s)
-3 passed (13.0s)
-
-# fresh clone check (the reviewer's step) at 20141c7: git clone → npm ci → npx tsc --noEmit
+# fresh clone check (the reviewer's step) at 048e16e: git clone → npm ci → npx tsc --noEmit
 exit code: 0
 ```
 
-**Both projects against the hosted demo** (`PLAYWRIGHT_BASE_URL=https://frontend-homework-2-red.vercel.app`, 2026-10-09, after deploying `20141c7`; this run produced the published HTML report):
+**Both projects against the hosted demo** (`PLAYWRIGHT_BASE_URL=https://frontend-homework-2-red.vercel.app`, 2026-10-09, after deploying `048e16e`; this run produced the published HTML report):
 
 ```text
 $ PLAYWRIGHT_BASE_URL=https://frontend-homework-2-red.vercel.app npx playwright test   # both projects, HTML report
 Running 79 tests using 1 worker
   ok  1 … ok 76 [chromium] (login 9 · responsive 33 · responsive-forms 15 · services 19)
-  ok 77 [mutation] › tests/services.mutation.spec.ts:36:7 › create → list → edit → delete (from a filtered list) › create from the filtered list, then it shows in that same list (4.4s)
-  ok 78 [mutation] › tests/services.mutation.spec.ts:62:7 › create → list → edit → delete (from a filtered list) › edit pre-fills the form, the change shows on the detail page, and Back returns to the filtered list (4.6s)
-  ok 79 [mutation] › tests/services.mutation.spec.ts:84:7 › create → list → edit → delete (from a filtered list) › delete asks for confirmation, then returns to the filtered list without the service (4.4s)
+  ok 77 [mutation] › tests/services.mutation.spec.ts:36:7 › create → list → edit → delete (from a filtered list) › create from the filtered list, then it shows in that same list (3.3s)
+  ok 78 [mutation] › tests/services.mutation.spec.ts:62:7 › create → list → edit → delete (from a filtered list) › edit pre-fills the form, the change shows on the detail page, and Back returns to the filtered list (5.1s)
+  ok 79 [mutation] › tests/services.mutation.spec.ts:84:7 › create → list → edit → delete (from a filtered list) › delete asks for confirmation, then returns to the filtered list without the service (3.9s)
 
-  79 passed (2.4m)
+  79 passed (2.3m)
 ```
 
 ## 10. Screen sizes and browsers checked
@@ -166,5 +152,6 @@ Running 79 tests using 1 worker
 | Create · Detail · Edit | 1920 · 1440 · 1366 · 768 · 375 | `tests/responsive-forms.spec.ts` (15 tests, `screenshots/forms/`) |
 | Login (default / error) | 1920 · 1440 · 1366 · 768 · 375 | `tests/login.spec.ts` (`screenshots/login/`) |
 | Design vs build | 1440 · 768 · 375 (list, login) | `docs/design-compare/*.png` |
-| HTML report (deployed demo, 2026-10-09, build `20141c7`) | 79 / 79 | https://frontend-homework-2-red.vercel.app/playwright-report/ (committed under `public/playwright-report/`) |
+| Claude Design frames vs build | list 1440 / 375, add / edit 1440 / 375 with validation, detail 1440 / 375 with the delete dialog | `docs/design-compare/frame-*.png` (frames: `docs/design/frames/`, build: `screenshots/review/` via `node scripts/capture-review.mjs <url>`) |
+| HTML report (deployed demo, 2026-10-09, build `048e16e`) | 79 / 79 | https://frontend-homework-2-red.vercel.app/playwright-report/ (committed under `public/playwright-report/`) |
 | Browsers | Chromium (Playwright) · Chrome on Windows 11 manual | Safari / Firefox not checked |

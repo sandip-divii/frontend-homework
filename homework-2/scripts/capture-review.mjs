@@ -77,6 +77,12 @@ for (const shot of SHOTS) {
   if (shot.ready) await page.locator(shot.ready).waitFor({ timeout: 60_000 });
   await page.evaluate(() => document.fonts.ready);
   if (shot.act) await shot.act(page);
+  // Load every image (cards below the fold are lazy) and move the mouse off the buttons so no hover state shows.
+  await page.evaluate(async () => {
+    for (const img of document.images) img.loading = "eager";
+    await Promise.all([...document.images].map((img) => (img.complete ? null : new Promise((r) => { img.onload = img.onerror = r; }))));
+  });
+  await page.mouse.move(0, 0);
   // Dialog shots: the dialog is fixed to the window, so capture a viewport as tall as the design frame instead of the whole page.
   const fullPage = !shot.name.endsWith("-delete");
   await page.screenshot({ path: path.join(OUT, `${shot.name}.png`), fullPage, animations: "disabled" });

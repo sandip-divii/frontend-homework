@@ -8,7 +8,7 @@ loading / empty / error states, test cases, Playwright (read-only + separate mut
 | --- | --- |
 | **Demo** | https://frontend-homework-2-red.vercel.app — Vercel (functions in Tokyo) + the same API on a free **TiDB Cloud Starter** MySQL-compatible database in Tokyo. Log in as `bookplate` / `Bookplate2026!` to add, edit and delete. Local run: see "Run it". |
 | **Repo** | https://github.com/sandip-divii/frontend-homework (public) — this homework lives in [`homework-2/`](https://github.com/sandip-divii/frontend-homework/tree/main/homework-2) |
-| **Design** | Figma [list frame](https://www.figma.com/design/7yxIdnZegxBVEiqyV3oQmA/XP-%7C-Bookplate-design?node-id=1600-38779) · [login frame](https://www.figma.com/design/7yxIdnZegxBVEiqyV3oQmA/XP-%7C-Bookplate-design?node-id=3429-36106) — exports in [`docs/figma-reference-1920.png`](docs/figma-reference-1920.png) and [`docs/figma-reference-login-1920.png`](docs/figma-reference-login-1920.png); create / detail / edit screens reuse the same primitives (no Figma frame exists for them). Design-vs-build images: [`docs/design-compare/`](docs/design-compare/) |
+| **Design** | Figma [list frame](https://www.figma.com/design/7yxIdnZegxBVEiqyV3oQmA/XP-%7C-Bookplate-design?node-id=1600-38779) · [login frame](https://www.figma.com/design/7yxIdnZegxBVEiqyV3oQmA/XP-%7C-Bookplate-design?node-id=3429-36106) — exports in [`docs/figma-reference-1920.png`](docs/figma-reference-1920.png) and [`docs/figma-reference-login-1920.png`](docs/figma-reference-login-1920.png); create / detail / edit screens reuse the same primitives (no Figma frame exists for them). Own frames for the screens without a Figma design (list 1440 / 375, add / edit with validation, detail with the delete dialog): [Claude Design canvas](https://claude.ai/artifact/LwFG2D17YvLRRXYxn3Ti6D), PNG exports in [`docs/design/frames/`](docs/design/frames/). Design-vs-build images: [`docs/design-compare/`](docs/design-compare/) (`frame-*.png` = own frames) |
 | **Docs** | [QA hand-over](docs/QA-HANDOVER.md) · [Test cases (WM QA format)](docs/TEST-CASES.md) · [QA build report](docs/BUILD-REPORT.md) · [Review prep Q&A](docs/REVIEW-QA.md) · [Design check](docs/DESIGN-CHECK.md) · [Plan](docs/PLAN.md) |
 
 ## Screens
@@ -50,7 +50,8 @@ Demo accounts (local seed only): see [`db/seed/users.json`](db/seed/users.json) 
 | `npm run test:e2e:mutation` | Playwright **mutation** project (3 tests): create → list → edit → delete on the real API (writes to the DB; never run against a shared server) |
 | `npm run test:e2e:all` | both projects, 79 tests (HTML report in `playwright-report/`; the run against the demo is committed under `public/playwright-report/` and served at [/playwright-report/](https://frontend-homework-2-red.vercel.app/playwright-report/)) |
 | `npm run qa:responsive` / `npm run qa:login` | screenshot subsets |
-| `node scripts/design-compare.mjs` | rebuilds `docs/design-compare/*.png` (Figma frame beside our screenshot at 1440 / 768 / 375) |
+| `node scripts/capture-review.mjs [url]` | captures the build screens that match the Claude Design frames (signed in as the expert, read-only) into `screenshots/review/` |
+| `node scripts/design-compare.mjs` | rebuilds `docs/design-compare/*.png`: Figma frames beside the build at 1440 / 768 / 375, and each Claude Design frame beside its build screen (`frame-*.png`) |
 
 Add `PLAYWRIGHT_BASE_URL=https://frontend-homework-2-red.vercel.app` in front of any Playwright script to run it against the deployed demo.
 
