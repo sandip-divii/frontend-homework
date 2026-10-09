@@ -3,7 +3,7 @@
 Format follows the WM QA Template ("Verify that …" cases with ID, precondition, steps, expected result).
 Areas are the Step 7 table: page opens · main flow · validation · list · roles · states · screen sizes.
 
-**Type:** **P** = positive (the happy path works) · **N** = negative (wrong input, wrong role, missing data, failure is handled). 45 cases: 21 P · 24 N.
+**Type:** **P** = positive (the happy path works) · **N** = negative (wrong input, wrong role, missing data, failure is handled). 45 cases: 22 P · 23 N.
 **Accounts** (local seed, `db/seed/users.json`): `bookplate` = expert (can manage services) · `reviewer` = plain user.
 **Base URL:** http://localhost:3001 (or the hosted demo https://frontend-homework-2-red.vercel.app) · **Data:** `npm run db:reset` gives 50 services (36 cover, 8 internal, 6 correction, 0 typo).
 **Automation column:** the Playwright test that covers the case (`tests/*.spec.ts`), or "manual".

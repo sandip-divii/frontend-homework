@@ -26,7 +26,7 @@ Reset the demo data at any time (Sandip): `node --env-file=.env.tidb db/seed.mjs
 
 ## 2. QA test cases
 
-[`docs/TEST-CASES.md`](TEST-CASES.md) — WM QA Template format (ID · type P / N · precondition · steps · expected result · automation), 45 cases: 21 positive, 24 negative:
+[`docs/TEST-CASES.md`](TEST-CASES.md) — WM QA Template format (ID · type P / N · precondition · steps · expected result · automation), 45 cases: 22 positive, 23 negative:
 
 | Area | IDs | Positive | Negative |
 | --- | --- | --- | --- |
