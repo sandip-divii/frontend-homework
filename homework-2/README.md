@@ -15,7 +15,7 @@ loading / empty / error states, test cases, Playwright (read-only + separate mut
 
 | Route | Who | What |
 | --- | --- | --- |
-| `/` | everyone | List: category tabs, search, sort, 12 per page, pagination — the filter state lives in the URL (`?category=cover&q=minji&sort=newest&page=2`); experts/admins also see **Add service** |
+| `/` | everyone | List: category tabs, search, sort, 12 per page, pagination — the filter state lives in the URL (`?category=cover&q=minji&sort=newest&page=2`) and travels to the detail / create / edit screens in `?back=`, so Back to the list, Cancel and every redirect after a save or delete return to the same filtered page; experts/admins also see **Add service** |
 | `/premium-service/new` | expert, admin | Create form (signed-out → `/login?next=…`, plain user → 403 page); success → toast → list |
 | `/premium-service/:id` | everyone | Details: thumbnail, badge, author, price `15,000` KRW, likes, rating, description, Created / Updated (`YYYY-MM-DD h:mm AM`, viewer's time zone); **Edit / Delete** for managers |
 | `/premium-service/:id/edit` | expert, admin | Edit form, pre-filled; success → toast → detail page |
@@ -46,9 +46,9 @@ Demo accounts (local seed only): see [`db/seed/users.json`](db/seed/users.json) 
 | --- | --- |
 | `npm run check` | `next typegen` + `tsc --noEmit` + ESLint — passes on a fresh clone, no build needed |
 | `npm run build` | production build |
-| `npm run test:e2e` | Playwright, read-only project (75 tests): login, list widths, form widths, services (page opens, list, states, roles, validation) |
+| `npm run test:e2e` | Playwright, read-only project (76 tests): login, list widths, form widths, services (page opens, list, states, roles, validation) |
 | `npm run test:e2e:mutation` | Playwright **mutation** project (3 tests): create → list → edit → delete on the real API (writes to the DB; never run against a shared server) |
-| `npm run test:e2e:all` | both projects, 78 tests (HTML report in `playwright-report/`; the run against the demo is committed under `public/playwright-report/` and served at [/playwright-report/](https://frontend-homework-2-red.vercel.app/playwright-report/)) |
+| `npm run test:e2e:all` | both projects, 79 tests (HTML report in `playwright-report/`; the run against the demo is committed under `public/playwright-report/` and served at [/playwright-report/](https://frontend-homework-2-red.vercel.app/playwright-report/)) |
 | `npm run qa:responsive` / `npm run qa:login` | screenshot subsets |
 | `node scripts/design-compare.mjs` | rebuilds `docs/design-compare/*.png` (Figma frame beside our screenshot at 1440 / 768 / 375) |
 
